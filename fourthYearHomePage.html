@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCSTT | University of Computer Studies (Thaton)</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* --- Root Brand Variables --- */
+        :root {
+            --primary: #A51C30;       /* Thaton Crimson */
+            --oxford-blue: #002147;   /* Oxford Blue */
+            --deep-navy: #001c3d;      /* Deep Dark Profile Header Navy */
+            --accent: #C49619;        /* Ivy League Gold */
+            --light-bg: #f8fafc;      /* Heritage Surface Off-White */
+            --white: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            --sidebar-width: 280px;
+            --topbar-height: 70px;
+            --success-glow: #10b981;
+        }
+
+        body.sidebar-collapsed {
+            --sidebar-width: 85px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Padauk', sans-serif;
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--oxford-blue);
+            line-height: 1.7;
+            display: flex;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        /* --- Language Toggle Utility --- */
+        .lang-mm { display: none; }
+        body.lang-burmese .lang-en { display: none; }
+        body.lang-burmese .lang-mm { display: inline-block; }
+        body.lang-burmese div.lang-mm, 
+        body.lang-burmese p.lang-mm, 
+        body.lang-burmese span.lang-mm, 
+        body.lang-burmese a.lang-mm,
+        body.lang-burmese h1.lang-mm, 
+        body.lang-burmese h2.lang-mm, 
+        body.lang-burmese h3.lang-mm { display: inline-block; }
+
+        /* --- 1. LEFT SIDE NAVIGATION MENU --- */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--oxford-blue) 0%, #001229 100%);
+            border-right: 4px solid var(--accent);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            z-index: 1000;
+            box-shadow: 4px 0 25px rgba(0,0,0,0.15);
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        body.sidebar-collapsed nav {
+            padding: 30px 10px;
+        }
+
+        .nav-brand-area {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .nav-logo {
+            height: 85px;
+            width: auto;
+            transition: var(--transition);
+            filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.2));
+        }
+        .nav-logo:hover { transform: scale(1.05); }
+
+        .nav-brand-area h2,
+        .nav-brand-title {
+            color: var(--white);
+            font-size: 0.95rem;
+            font-weight: 800;
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
+
+        body.sidebar-collapsed .nav-logo { height: 45px; }
+        body.sidebar-collapsed .nav-brand-area h2 { display: none !important; }
+
+        .nav-links { width: 100%; flex-grow: 1; overflow-y: auto; }
+        .nav-links ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            padding: 12px 18px;
+            border-radius: 8px;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        body.sidebar-collapsed .nav-links a { justify-content: center; padding: 12px 0; }
+        body.sidebar-collapsed .nav-links span { display: none; }
+
+        .nav-links a i {
+            font-size: 1.1rem;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            text-align: center;
+            color: var(--accent);
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover i {
+            color: var(--white);
+            background: var(--primary);
+            transform: scale(1.15) rotate(15deg);
+            box-shadow: 0 4px 10px rgba(165, 28, 48, 0.3);
+        }
+
+        .nav-links a:hover, .nav-links li.active a {
+            color: var(--white);
+            background: rgba(255, 255, 255, 0.08);
+            border-left: 4px solid var(--primary);
+            padding-left: 22px;
+        }
+
+        body.sidebar-collapsed .nav-links a:hover, 
+        body.sidebar-collapsed .nav-links li.active a {
+            padding-left: 0;
+            border-left: none;
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--accent);
+        }
+
+        /* --- Auto Reply System Chat Box styles --- */
+        .autoreply-chat-box {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 350px;
+            height: 450px;
+            background: var(--white);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            display: none;
+            flex-direction: column;
+            z-index: 9999;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        .autoreply-chat-box.active {
+            display: flex;
+        }
+        .chat-box-header {
+            background: var(--oxford-blue);
+            color: var(--white);
+            padding: 15px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--primary);
+        }
+        .chat-box-header span { font-size: 0.9rem; display: flex; align-items: center; gap: 8px;}
+        .chat-box-header i.close-chat { cursor: pointer; color: #94a3b8; transition: var(--transition); }
+        .chat-box-header i.close-chat:hover { color: var(--white); }
+        .chat-messages {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #f8fafc;
+        }
+        .chat-msg {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+        .chat-msg.bot {
+            background: #e2e8f0;
+            color: var(--oxford-blue);
+            align-self: flex-start;
+            border-left: 3px solid var(--accent);
+        }
+        .chat-msg.user {
+            background: var(--primary);
+            color: var(--white);
+            align-self: flex-end;
+        }
+        .chat-input-area {
+            display: flex;
+            border-top: 1px solid #e2e8f0;
+            padding: 10px;
+            background: var(--white);
+        }
+        .chat-input-area input {
+            flex-grow: 1;
+            border: 1px solid #cbd5e1;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            outline: none;
+        }
+        .chat-input-area button {
+            background: var(--oxford-blue);
+            color: var(--white);
+            border: none;
+            padding: 0 15px;
+            margin-left: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .chat-input-area button:hover { background: var(--primary); }
+
+        /* --- 2. UPDATED TOP TELEMETRY BAR --- */
+        .top-telemetry-bar {
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            height: var(--topbar-height);
+            background: var(--white);
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 999;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            transition: var(--transition);
+        }
+
+        .topbar-left-zone {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .sidebar-toggle-btn {
+            background: var(--oxford-blue);
+            color: var(--white);
+            border: 2px solid var(--accent);
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+        .sidebar-toggle-btn:hover { background: var(--primary); }
+
+        .lang-switch-btn {
+            background: #f1f5f9;
+            color: var(--oxford-blue);
+            border: 1px solid #cbd5e1;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+        .lang-switch-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .live-clock-widget {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f1f5f9;
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #002147;
+            border: 1px solid #e2e8f0;
+            border-radius: 50px;
+        }
+        .live-clock-widget i { color: #ef4444; }
+
+        .topbar-center-hub {
+            display: flex;
+            align-items: center;
+            background: #fffdf5; 
+            border: 1px solid #e2d199;
+            border-left: 5px solid var(--accent); 
+            border-radius: 8px;
+            padding: 6px;
+            width: 100%;
+            max-width: 480px;
+            height: 52px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+            overflow: hidden;
+        }
+
+        .node-badge {
+            background: var(--primary);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            line-height: 1.2;
+            text-align: left;
+            height: 100%;
+            z-index: 5;
+            flex-shrink: 0;
+        }
+        .node-badge i { font-size: 0.8rem; }
+
+        .status-scroll-text {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #002147;
+            margin-left: 12px;
+            white-space: nowrap;
+            display: inline-block;
+            animation: trainAnimateAnnouncement 12s linear infinite;
+        }
+        
+        .topbar-center-hub:hover .status-scroll-text {
+            animation-play-state: paused;
+        }
+
+        @keyframes trainAnimateAnnouncement {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .topbar-right-zone {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        /* --- FIXED PROFILE TRIGGER SYSTEM --- */
+        .profile-trigger {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 6px 18px 6px 8px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 50px; 
+            transition: var(--transition);
+            height: 48px;
+        }
+        .profile-trigger:hover { background: #f1f5f9; border-color: #cbd5e1; }
+
+        .avatar-frame-container { 
+            position: relative; 
+            width: 34px; 
+            height: 34px; 
+            flex-shrink: 0;
+        }
+
+        .user-avatar-img { 
+            width: 100%; 
+            height: 100%; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            border: 2px solid var(--accent); 
+            background: #f1f5f9;
+        }
+
+        .status-online-dot { 
+            position: absolute; 
+            bottom: -1px; 
+            right: -1px; 
+            width: 9px; 
+            height: 9px; 
+            background-color: #10b981; 
+            border: 2px solid var(--white); 
+            border-radius: 50%; 
+            z-index: 2;
+        }
+
+        .profile-trigger .icon-chevron {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-left: 6px;
+        }
+
+        .profile-trigger-info { 
+            display: flex; 
+            flex-direction: column; 
+            text-align: left; 
+            justify-content: center;
+        }
+        .profile-trigger-info .user-name { 
+            font-size: 0.88rem; 
+            font-weight: 700; 
+            color: #002147; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            max-width: 115px; 
+            line-height: 1.2;
+        }
+        .profile-trigger-info .user-id-badge { 
+            font-size: 0.72rem; 
+            color: #64748b; 
+            font-weight: 500; 
+            margin-top: 1px; 
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 115px;
+            line-height: 1.1;
+        }
+
+        /* PROFILE DROPDOWN CARD */
+        .profile-dropdown-card {
+            position: absolute; top: calc(100% + 12px); right: 0; width: 300px;
+            background: var(--white); border-radius: 4px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); display: none; flex-direction: column;
+            z-index: 10000; overflow: hidden; opacity: 0; transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        
+        .profile-dropdown-card.show-card { display: flex; opacity: 1; transform: translateY(0); }
+
+        .dropdown-header { background: var(--deep-navy); padding: 24px 16px; text-align: center; color: var(--white); }
+        .dropdown-avatar-container { position: relative; width: 80px; height: 80px; margin: 0 auto 12px auto; cursor: pointer; border-radius: 50%; }
+        .dropdown-avatar-container img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--white); }
+        
+        .avatar-edit-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center;
+            align-items: center; color: var(--white); font-size: 0.8rem; opacity: 0; transition: var(--transition);
+        }
+        .dropdown-avatar-container:hover .avatar-edit-overlay { opacity: 1; }
+
+        .hidden-avatar-input { display: none; }
+
+        .dropdown-full-name { font-size: 1.15rem; font-weight: 700; color: var(--white); letter-spacing: 0.3px; }
+        .dropdown-email { font-size: 0.82rem; color: #a0aec0; margin-top: 4px; font-weight: 400; }
+
+        .dropdown-body { padding: 18px 20px; display: flex; flex-direction: column; gap: 16px; background: #fdfdfd; }
+        .db-item { display: flex; align-items: center; font-size: 0.88rem; color: #1e293b; padding-bottom: 4px; }
+        .db-item i { color: var(--primary); font-size: 1rem; width: 30px; text-align: left; }
+        .db-item strong { font-weight: 700; margin-right: 6px; color: #1e293b; }
+        .db-item span { color: #64748b; margin-left: auto; font-weight: 500; }
+
+        .dropdown-footer { display: flex; padding: 0 20px 20px 20px; gap: 12px; background: #fdfdfd; }
+        .logout-btn, .close-profile-btn { flex: 1; padding: 10px; border: none; font-size: 0.85rem; font-weight: 700; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: var(--transition); }
+        
+        .close-profile-btn { background: #f1f5f9; color: #1e293b; border: 1px solid #e2e8f0; }
+        .close-profile-btn:hover { background: #e2e8f0; }
+        .logout-btn { background: #fff5f5; color: #ef4444; border: 1px solid #fecaca; }
+        .logout-btn:hover { background: #ef4444; color: var(--white); border-color: #ef4444; }
+
+        /* --- 3. MAIN CONTENT WORKSPACE AREA --- */
+        .main-workspace {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--topbar-height);
+            width: calc(100% - var(--sidebar-width));
+            min-height: calc(100vh - var(--topbar-height));
+            transition: var(--transition);
+        }
+
+        .header {
+            height: 65vh;
+            background: linear-gradient(rgba(0, 33, 71, 0.4), rgba(165, 28, 48, 0.2)), url('imageForProject/UcsttEntranceGate.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            padding: 0 20px;
+        }
+
+        .text-box h1 { font-size: 2.8rem; font-weight: 800; text-shadow: 2px 2px 10px rgba(0,0,0,0.6); }
+        .text-box p { font-size: 1.05rem; margin-bottom: 2rem; text-shadow: 1px 1px 5px rgba(0,0,0,0.6); }
+
+        /* --- FLEXIBLE HERO BUTTON SYSTEM --- */
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            padding: 10px 30px;
+            background: var(--primary);
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid var(--accent);
+            border-radius: 6px;
+            transition: var(--transition);
+            white-space: nowrap;
+            line-height: 1.2;
+        }
+        .hero-btn:hover { background: var(--white); color: var(--primary); }
+
+        section { padding: 60px 5%; text-align: center; }
+        .row { display: flex; justify-content: space-between; gap: 1.5rem; margin-top: 40px; flex-wrap: wrap; }
+
+        .course-col {
+            flex: 1;
+            min-width: 250px;
+            background: var(--light-bg);
+            padding: 30px 20px;
+            border-top: 5px solid var(--oxford-blue);
+            transition: var(--transition);
+        }
+        .course-col:hover { border-top-color: var(--primary); transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.05); }
+        .course-col h3 { margin-bottom: 15px; color: var(--primary); }
+
+        /* --- MARQUEE SLIDER RAIL --- */
+        .marquee-wrapper-container {
+            width: 100%;
+            overflow: hidden;
+            padding: 30px 0;
+            position: relative;
+            background: #fafafa;
+            border-top: 1px solid #f1f5f9;
+            border-bottom: 1px solid #f1f5f9;
+            margin-top: 30px;
+        }
+        
+        .train-marquee-track {
+            display: flex;
+            width: max-content;
+            gap: 25px;
+            animation: trainMoveLoop 35s linear infinite;
+        }
+        
+        .marquee-wrapper-container:hover .train-marquee-track { animation-play-state: paused; }
+        
+        @keyframes trainMoveLoop {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-50% - 12.5px)); }
+        }
+
+        .campus-col {
+            flex-shrink: 0; width: 260px; position: relative; overflow: hidden;
+            border: 6px solid var(--white); box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            height: 260px; border-radius: 12px; cursor: pointer; transition: var(--transition);
+        }
+        .campus-col img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
+        .campus-col:hover img { transform: scale(1.1); }
+        .layer {
+            position: absolute; bottom: 0; width: 100%;
+            background: linear-gradient(transparent, rgba(0, 33, 71, 0.95));
+            color: var(--white); padding: 25px 15px 15px 15px; transition: var(--transition); text-align: left;
+        }
+        .campus-col:hover .layer { background: linear-gradient(transparent, rgba(165, 28, 48, 0.98)); }
+        .layer h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; color: var(--white); }
+        .layer span { font-size: 0.75rem; color: var(--accent); display: block; margin-top: 2px; font-weight: 500; }
+
+        /* --- HORIZON MODALS --- */
+        .horizon-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 18, 41, 0.6); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); z-index: 5000;
+            justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease;
+        }
+        .horizon-modal.active { display: flex; opacity: 1; }
+        .modal-content {
+            background: var(--white); width: 100%; max-width: 600px; border-radius: 15px;
+            overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.3); border: 3px solid var(--accent);
+            transform: scale(0.85); transition: transform 0.3s ease; position: relative;
+        }
+        .horizon-modal.active .modal-content { transform: scale(1); }
+        .modal-header { background: var(--oxford-blue); color: var(--white); padding: 20px 25px; position: relative; }
+        .modal-header h2 { font-size: 1.5rem; color: var(--white); display: flex; align-items: center; gap: 10px; }
+        .close-modal-btn { position: absolute; top: 20px; right: 25px; color: rgba(255,255,255,0.7); font-size: 1.5rem; cursor: pointer; transition: var(--transition); }
+        .close-modal-btn:hover { color: var(--accent); }
+        .modal-body { padding: 30px; text-align: left; }
+        .info-block { margin-bottom: 25px; }
+        .info-block h4 { color: var(--primary); font-size: 1rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #f1f5f9; padding-bottom: 4px; }
+        .info-block p { font-size: 0.9rem; color: var(--text-main); }
+
+        /* --- CREATORS TEAM SECTIONS --- */
+        .creators-section { padding: 80px 6%; background: #fafcff; text-align: center; }
+        .creators-section h1 { font-size: 2.2rem; font-weight: 800; color: var(--oxford-blue); }
+        .creators-title-line { width: 70px; height: 5px; background: linear-gradient(90deg, var(--primary), var(--accent)); margin: 12px auto 20px auto; border-radius: 10px; }
+        .section-subtitle { font-size: 0.95rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 40px auto; }
+        
+        .team-compact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .team-glass-card { background: var(--white); border: 1px solid #e2e8f0; border-radius: 14px; display: flex; align-items: center; padding: 16px; gap: 16px; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.02); transition: var(--transition); }
+        .team-glass-card:hover { transform: translateY(-4px); border-color: rgba(165, 28, 48, 0.3); box-shadow: 0 12px 25px rgba(165, 28, 48, 0.08); }
+        .team-glass-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--oxford-blue); transition: var(--transition); }
+        .team-glass-card:hover::before { background: var(--primary); }
+        .card-avatar-wrapper { width: 80px; height: 80px; border-radius: 10px; overflow: hidden; flex-shrink: 0; border: 2px solid #f1f5f9; position: relative; }
+        .card-avatar-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
+        .team-glass-card:hover .card-avatar-wrapper img { transform: scale(1.1); }
+        .card-info-pane { text-align: left; flex-grow: 1; display: flex; flex-direction: column; }
+        .card-id-badge { font-size: 0.68rem; font-weight: 700; color: var(--primary); background: rgba(165, 28, 48, 0.05); padding: 2px 8px; border-radius: 4px; width: max-content; margin-bottom: 5px; border: 1px solid rgba(165, 28, 48, 0.08); }
+        .card-info-pane h3 { font-size: 1.05rem; color: var(--oxford-blue); font-weight: 700; margin-bottom: 2px; }
+        .card-info-pane .role-text { font-size: 0.82rem; color: var(--text-muted); font-weight: 500; margin-bottom: 8px; }
+        .card-social-row { display: flex; gap: 10px; }
+        .card-social-row a { color: #94a3b8; font-size: 0.85rem; transition: var(--transition); text-decoration: none; }
+        .card-social-row a:hover { color: var(--primary); }
+
+        .footer { background: var(--oxford-blue); color: var(--white); padding: 30px 10px; border-top: 5px solid var(--primary); text-align: center; font-size: 0.9rem; }
+
+        /* --- RESPONSIVE ENGINE RECONSTRUCTION --- */
+        @media (max-width: 1024px) {
+            body, body.sidebar-collapsed { flex-direction: column; }
+            nav { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 4px solid var(--accent); padding: 15px; }
+            .nav-brand-area { display: flex; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 10px; margin-bottom: 10px; }
+            .nav-logo { height: 55px; }
+            .nav-links ul { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 8px; }
+            .nav-links a { padding: 8px 14px; font-size: 0.8rem; }
+            
+            .top-telemetry-bar { position: relative; left: 0; width: 100%; display: flex; flex-direction: column; padding: 15px; gap: 10px; height: auto; }
+            .topbar-left-zone { width: 100%; justify-content: space-between; }
+            .topbar-center-hub { width: 100%; justify-content: center; padding: 0; flex-wrap: wrap; }
+            .topbar-right-zone { width: 100%; justify-content: center; margin-top: 5px; }
+            .profile-dropdown-card { right: auto; left: 50%; transform: translateX(-50%) translateY(-10px); }
+            .profile-dropdown-card.show-card { transform: translateX(-50%) translateY(0); }
+            
+            .sidebar-toggle-btn { display: none; }
+            .main-workspace { margin-left: 0; margin-top: 0; width: 100%; }
+            .text-box h1 { font-size: 2.2rem; }
+            .text-box p { font-size: 1rem; }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links ul { gap: 4px; }
+            .nav-links a { padding: 6px 10px; font-size: 0.75rem; gap: 6px; }
+            .text-box h1 { font-size: 1.75rem; }
+            section { padding: 40px 4%; }
+            .live-clock-widget { font-size: 0.75rem; padding: 4px 10px; }
+        }
+    </style>
+</head>
+<body>
+    
+    <nav id="sidebarNode">
+        <div class="nav-brand-area">
+            <a href="fourthYearHomePage.html"><img src="imageForProject/UCSTT Logo(true).png" alt="UCSTT Logo" class="nav-logo"></a>
+            <h2 class="nav-brand-title">NextGen UCSTT</h2>
+        </div>
+        
+        <div class="nav-links">
+            <ul>
+                <li class="active"><a href="fourthYearHomePage.html"><i class="fas fa-home"></i> <span class="lang-en">HOME</span><span class="lang-mm">ပင်မစာမျက်နှာ</span></a></li>
+                <li><a href="fourthYearAbout.html"><i class="fas fa-info-circle"></i> <span class="lang-en">ABOUT</span><span class="lang-mm">ကျောင်းအကြောင်း</span></a></li>
+                <li><a href="fourthYearGalleryPage.html"><i class="fas fa-images"></i> <span class="lang-en">GALLERY</span><span class="lang-mm">ဓာတ်ပုံများ</span></a></li>
+                <li><a href="feedBack.html"><i class="fas fa-comment-alt"></i> <span class="lang-en">FEEDBACK</span><span class="lang-mm">အကြံပြုချက်</span></a></li>
+                <li><a href="contact.html"><i class="fas fa-envelope"></i> <span class="lang-en">CONTACT</span><span class="lang-mm">ဆက်သွယ်ရန်</span></a></li>
+                <li><a href="askChat.html"><i class="fas fa-headset"></i> <span class="lang-en">ASK CHAT</span><span class="lang-mm">မေးမြန်းရန်</span></a></li>
+                <li><a href="learnHtmlCssJs.html"><i class="fas fa-graduation-cap"></i> <span class="lang-en">LEARNING</span><span class="lang-mm">သင်ခန်းစာများ</span></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="autoreply-chat-box" id="autoChatBox">
+        <div class="chat-box-header">
+            <span><i class="fas fa-robot"></i> <span class="lang-en">UCSTT Virtual Assistant</span><span class="lang-mm">UCSTT အလိုအလျောက် တုံ့ပြန်စနစ်</span></span>
+            <i class="fas fa-times close-chat" onclick="closeAutoReplyChat()"></i>
+        </div>
+        <div class="chat-messages" id="chatMessagesBox">
+            <div class="chat-msg bot lang-en">Hello! Welcome to NextGen UCSTT. How can I assist you with your academic queries today?</div>
+            <div class="chat-msg bot lang-mm">မင်္ဂလာပါ! NextGen UCSTT မှ ကြိုဆိုပါသည်။ သင်ကြားရေးဆိုင်ရာ အချက်အလက်များကို မေးမြန်းနိုင်ပါသည်။</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatUserInput" placeholder="Type a message..." onkeypress="handleChatEnter(event)">
+            <button onclick="sendChatMessage()"><span class="lang-en">Send</span><span class="lang-mm">ပို့မည်</span></button>
+        </div>
+    </div>
+
+    <div class="top-telemetry-bar">
+        <div class="topbar-left-zone">
+            <button class="sidebar-toggle-btn" onclick="toggleSidebarSize()" title="Toggle sidebar navigation">
+                <i class="fas fa-bars" id="toggleIcon"></i>
+            </button>
+            <button class="lang-switch-btn" onclick="toggleLanguageChoice()">
+                <i class="fas fa-globe"></i>
+                <span class="lang-en">🇲🇲 မြန်မာ</span>
+                <span class="lang-mm">🇬🇧 English</span>
+            </button>
+            <div class="live-clock-widget">
+                <i class="far fa-clock"></i>
+                <span id="live-time-display">00:00:00 AM</span>
+            </div>
+        </div>
+
+        <div class="topbar-center-hub">
+            <div class="node-badge">
+                <i class="fas fa-university"></i>
+                <div>
+                    <span class="lang-en">Institutional<br>Node</span>
+                    <span class="lang-mm">တက္ကသိုလ်<br>စနစ်</span>
+                </div>
+            </div>
+            <div class="status-scroll-text" id="campus-hours-text">
+                ယနေ့UCSTTတွင်<strong>project show</strong>ကျင်းပနေပါသည်။second yearမှမောင်သော်တာဟိန်းနှင့်သူငယ်ချင်းများမှ
+                <strong>NextGen UCSTT</strong>အမည်ဖြင့်ဝင်ရောက်ယှဉ်ပြိုင်နေပါသည်။
+            </div>
+        </div>
+
+        <div class="topbar-right-zone">
+            <div class="user-profile-hub" id="userProfileHub">
+                <div class="profile-trigger" onclick="toggleProfileDropdown(event)">
+                    <div class="avatar-frame-container">
+                        <img src="photo_2025-11-08_11-17-04.jpg" alt="Student Pic" class="user-avatar-badge user-avatar-img">
+                        <div class="status-online-dot"></div>
+                    </div>
+                    <div class="profile-trigger-info">
+                        <span class="user-name-badge user-name">Loading...</span>
+                        <span class="user-roll-badge user-id-badge">UCSTT(24-25)-000</span>
+                    </div>
+                    <i class="fas fa-chevron-down icon-chevron" title="Open profile dropdown"></i>
+                </div>
+                
+                <div class="profile-dropdown-card dropdownCardNode" id="dropdownCardNode" onclick="event.stopPropagation()">
+                    <div class="dropdown-header">
+                        <div class="dropdown-avatar-container" onclick="triggerPhotoUpload()">
+                            <img src="photo_2025-11-08_11-17-04.jpg" alt="Student Pic" class="dropdown-avatar-img">
+                            <div class="avatar-edit-overlay">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                        </div>
+                        <input type="file" id="hiddenAvatarInput" accept="image/*" class="hidden-avatar-input" onchange="handlePhotoUpdate(event)">
+                        
+                        <h4 class="dropdown-full-name">Name</h4>
+                        <p class="dropdown-email">student@ucstt.edu.mm</p>
+                    </div>
+                    <div class="dropdown-body">
+                        <div class="db-item">
+                            <i class="fas fa-graduation-cap"></i> 
+                            <div>
+                                <strong class="lang-en">Year/Major:</strong>
+                                <strong class="lang-mm">သင်တန်းနှစ်/မေဂျာ:</strong>
+                            </div> 
+                            <span class="dropdown-year-major">First Year (CST)</span>
+                        </div>
+                        <div class="db-item">
+                            <i class="fas fa-history"></i> 
+                            <div>
+                                <strong class="lang-en">Last Login:</strong>
+                                <strong class="lang-mm">နောက်ဆုံးဝင်ရောက်ချိန်:</strong>
+                            </div> 
+                            <span class="dropdown-last-login">7/9/2026, 9:27:10 PM</span>
+                        </div>
+                    </div>
+                    <div class="dropdown-footer">
+                        <button class="close-profile-btn" onclick="closeProfileDropdown()">
+                            <span class="lang-en">Cancel</span>
+                            <span class="lang-mm">မလုပ်တော့ပါ</span>
+                        </button>
+                        <button class="logout-btn" onclick="handleLogout()">
+                            <i class="fas fa-sign-out-alt"></i> 
+                            <span class="lang-en">Log Out</span>
+                            <span class="lang-mm">ထွက်မည်</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-workspace">
+        <section class="header">
+            <div class="text-box">
+                <h1 class="lang-en">University of Computer Studies (Thaton)</h1>
+                <h1 class="lang-mm">ကွန်ပျူတာတက္ကသိုလ် (သထုံ)</h1>
+
+                <p class="lang-en"><strong>Welcome Back, Fourth Year Innovators!</strong></p>
+                <p class="lang-mm"><strong>စတုတ္တနှစ် ကျောင်းသား/သူများ မင်္ဂလာပါ!</strong></p>
+
+                <a href="study.html" class="hero-btn">
+                    <span class="lang-en">LET STUDY</span>
+                    <span class="lang-mm">စာလေ့လာရန်</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="course">
+            <h1 class="lang-en">Academic Excellence</h1>
+            <h1 class="lang-mm">ပညာရေးဆိုင်ရာ ထူးချွန်ထက်မြက်မှု</h1>
+
+            <p class="lang-en">Helping students build strong skills to become future tech leaders.</p>
+            <p class="lang-mm">အနာဂတ် နည်းပညာခေါင်းဆောင်များ ဖြစ်လာစေရန် ကျောင်းသားများ၏ ကျွမ်းကျင်မှုများကို မြှင့်တင်ပေးလျက်ရှိပါသည်။</p>
+
+            <div class="row">
+                <div class="course-col">
+                    <h3 class="lang-en">Skill Mastery</h3>
+                    <h3 class="lang-mm">ကျွမ်းကျင်မှု ပျိုးထောင်ခြင်း</h3>
+                    <p class="lang-en">Develop critical expertise in programming, cybersecurity, AI, and professional teamwork.</p>
+                    <p class="lang-mm">ပရိုဂရမ်းမင်း၊ ဆိုက်ဘာလုံခြုံရေး၊ AI နှင့် အသင်းအဖွဲ့လိုက် လုပ်ဆောင်နိုင်မှု စွမ်းရည်များကို စနစ်တကျ သင်ကြားပေးပါသည်။</p>
+                </div>
+                <div class="course-col">
+                    <h3 class="lang-en">Degrees</h3>
+                    <h3 class="lang-mm">အပ်နှင်းသည့် ဘွဲ့များ</h3>
+                    <p class="lang-en">Bachelor of Computer Science (B.C.Sc.) <br>Bachelor of Computer Technology (B.C.Tech.)</p>
+                    <p class="lang-mm">ကွန်ပျူတာသိပ္ပံဘွဲ့ (B.C.Sc.) <br>ကွန်ပျူတာနည်းပညာဘွဲ့ (B.C.Tech.)</p>
+                </div>
+                <div class="course-col">
+                    <h3 class="lang-en">Global Careers</h3>
+                    <h3 class="lang-mm">နိုင်ငံတကာ အလုပ်အကိုင်များ</h3>
+                    <p class="lang-en">Join the ranks of top Software Engineers, Data Scientists, and Cloud Architects worldwide.</p>
+                    <p class="lang-mm">ကမ္ဘာ့အဆင့်မီ ဆော့ဖ်ဝဲလ်အင်ဂျင်နီယာများ၊ ဒေတာသိပ္ပံပညာရှင်များနှင့် Cloud နည်းပညာရှင်များ ဖြစ်လာစေရန်။</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="horizons">
+            <h1 class="lang-en">Global Opportunities</h1>
+            <h1 class="lang-mm">နိုင်ငံတကာ အခွင့်အလမ်းများ</h1>
+
+            <p class="lang-en">Click on a country to explore IT programs and jobs.</p>
+            <p class="lang-mm">IT သင်တန်းများနှင့် အလုပ်အကိုင် အခွင့်အလမ်းများကို ကြည့်ရှုရန် သက်ဆိုင်ရာ နိုင်ငံကို နှိပ်ပါ။</p>
+            
+            <div class="marquee-wrapper-container">
+                <div class="train-marquee-track">
+                    <div class="campus-col" onclick="openCountryDetails('thailand')">
+                        <img src="imageForProject/T.jpg" alt="Thailand">
+                        <div class="layer">
+                            <h3>THAILAND</h3>
+                            <span><span class="lang-en">Click to view ➔</span><span class="lang-mm">ကြည့်ရှုရန် နှိပ်ပါ ➔</span></span>
+                        </div>
+                    </div>
+                    <div class="campus-col" onclick="openCountryDetails('singapore')">
+                        <img src="imageForProject/Sg.jpg" alt="Singapore">
+                        <div class="layer">
+                            <h3>SINGAPORE</h3>
+                            <span><span class="lang-en">Click to view ➔</span><span class="lang-mm">ကြည့်ရှုရန် နှိပ်ပါ ➔</span></span>
+                        </div>
+                    </div>
+                    <div class="campus-col" onclick="openCountryDetails('japan')">
+                        <img src="imageForProject/J.jpg" alt="Japan">
+                        <div class="layer">
+                            <h3>JAPAN</h3>
+                            <span><span class="lang-en">Click to view ➔</span><span class="lang-mm">ကြည့်ရှုရန် နှိပ်ပါ ➔</span></span>
+                        </div>
+                    </div>
+                    <div class="campus-col" onclick="openCountryDetails('malaysia')">
+                        <img src="imageForProject/M.jpg" alt="Malaysia">
+                        <div class="layer">
+                            <h3>MALAYSIA</h3>
+                            <span><span class="lang-en">Click to view ➔</span><span class="lang-mm">ကြည့်ရှုရန် နှိပ်ပါ ➔</span></span>
+                        </div>
+                    </div>
+                    <div class="campus-col" onclick="openCountryDetails('korea')">
+                        <img src="imageForProject/k.jpg" alt="South Korea">
+                        <div class="layer">
+                            <h3>SOUTH KOREA</h3>
+                            <span><span class="lang-en">Click to view ➔</span><span class="lang-mm">ကြည့်ရှုရန် နှိပ်ပါ ➔</span></span>
+                        </div>
+                    </div>
+                    <div class="campus-col" onclick="openCountryDetails('germany')">
+                        <img src="imageForProject/Ger_Img.jpg" alt="Germany">
+                        <div class="layer">
+                            <h3>GERMANY</h3>
+                            <span><span class="lang-en">Click to view ➔</span><span class="lang-mm">ကြည့်ရှုရန် နှိပ်ပါ ➔</span></span>
+                        </div>
+                    </div>
+                    <div class="campus-col" onclick="openCountryDetails('australia')">
+                        <img src="imageForProject/As.jpg" alt="Australia">
+                        <div class="layer">
+                            <h3>AUSTRALIA</h3>
+                            <span><span class="lang-en">Click to view ➔</span><span class="lang-mm">ကြည့်ရှုရန် နှိပ်ပါ ➔</span></span>
+                        </div>
+                    </div>
+                    <div class="campus-col" onclick="openCountryDetails('usa')">
+                        <img src="imageForProject/Us.jpg" alt="USA">
+                        <div class="layer">
+                            <h3>USA</h3>
+                            <span><span class="lang-en">Click to view ➔</span><span class="lang-mm">ကြည့်ရှုရန် နှိပ်ပါ ➔</span></span>
+                        </div>
+                    </div>
+                    <div class="campus-col" onclick="openCountryDetails('uk')">
+                        <img src="imageForProject/UK_Img.jpg" alt="United Kingdom">
+                        <div class="layer">
+                            <h3>UNITED KINGDOM</h3>
+                            <span><span class="lang-en">Click to view ➔</span><span class="lang-mm">ကြည့်ရှုရန် နှိပ်ပါ ➔</span></span>
+                        </div>
+                    </div>
+                    <div class="campus-col" onclick="openCountryDetails('canada')">
+                        <img src="imageForProject/Ca.jpg" alt="Canada">
+                        <div class="layer">
+                            <h3>CANADA</h3>
+                            <span><span class="lang-en">Click to view ➔</span><span class="lang-mm">ကြည့်ရှုရန် နှိပ်ပါ ➔</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="horizon-modal" id="countryModal" onclick="closeCountryModal(event)">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalCountryTitle"><i class="fas fa-globe-asia"></i> Destination Details</h2>
+                    <span class="close-modal-btn" onclick="hideModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="info-block">
+                        <h4>
+                            <i class="fas fa-graduation-cap"></i> 
+                            <span class="lang-en">Recommended IT Programs</span>
+                            <span class="lang-mm">အကြံပြုထားသော IT သင်တန်းများ</span>
+                        </h4>
+                        <p id="modalItProgram">Loading data...</p>
+                    </div>
+                    <div class="info-block">
+                        <h4>
+                            <i class="fas fa-briefcase"></i> 
+                            <span class="lang-en">Job Opportunities</span>
+                            <span class="lang-mm">အလုပ်အကိုင် အခွင့်အလမ်းများ</span>
+                        </h4>
+                        <p id="modalJobOpp">Loading data...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="creators-section">
+            <h1 class="lang-en">Meet Our Creative Team</h1>
+            <h1 class="lang-mm">ဝဘ်ဆိုက်ဖန်တီးသူများ အဖွဲ့</h1>
+            <div class="creators-title-line"></div>
+            
+            <p class="section-subtitle lang-en">This is the student team that built this website.</p>
+            <p class="section-subtitle lang-mm">ဤဝဘ်ဆိုက်အား ပူးပေါင်းဖန်တီးခဲ့ကြသော ကျောင်းသား/သူများ အဖွဲ့ဖြစ်ပါသည်။</p>
+            
+            <div class="team-compact-grid">
+                <div class="team-glass-card">
+                    <div class="card-avatar-wrapper"><img src="photo_2025-11-08_11-17-04.jpg" alt="Thawdar Hein"></div>
+                    <div class="card-info-pane">
+                        <span class="card-id-badge">UCSTT(24-25)-081</span>
+                        <h3>Thawdar Hein</h3>
+                        <span class="role-text"><span class="lang-en">Leader</span><span class="lang-mm">အဖွဲ့ခေါင်းဆောင်</span></span>
+                        <div class="card-social-row">
+                            <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-glass-card">
+                    <div class="card-avatar-wrapper"><img src="imageForProject/Pwint Yamone Zaw.jpg" alt="Pwint Yamone Zaw"></div>
+                    <div class="card-info-pane">
+                        <span class="card-id-badge">UCSTT(24-25)-054</span>
+                        <h3>Pwint Yamone Zaw</h3>
+                        <span class="role-text"></span>
+                        <div class="card-social-row">
+                            <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-glass-card">
+                    <div class="card-avatar-wrapper"><img src="Ei_Ei_Phyo.jpg" alt="Ei Ei Phyo"></div>
+                    <div class="card-info-pane">
+                        <span class="card-id-badge">UCSTT(24-25)-083</span>
+                        <h3>Ei Ei Phyo</h3>
+                        <span class="role-text"></span>
+                        <div class="card-social-row">
+                            <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-glass-card">
+                    <div class="card-avatar-wrapper"><img src="Shwe_Yi_Tun.jpg" alt="Shwe Yi Tun"></div>
+                    <div class="card-info-pane">
+                        <span class="card-id-badge">UCSTT(24-25)-080</span>
+                        <h3>Shwe Yi Tun</h3>
+                        <span class="role-text"></span>
+                        <div class="card-social-row">
+                            <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-glass-card">
+                    <div class="card-avatar-wrapper"><img src="Shun_lae_Thawdar.jpg" alt="Shoon Lae Thawdar"></div>
+                    <div class="card-info-pane">
+                        <span class="card-id-badge">UCSTT(24-25)-082</span>
+                        <h3>Shoon Lae Thawdar</h3>
+                        <span class="role-text"></span>
+                        <div class="card-social-row">
+                            <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-glass-card">
+                    <div class="card-avatar-wrapper"><img src="Thet_Mon_Oo.jpg" alt="Thet Mon Oo"></div>
+                    <div class="card-info-pane">
+                        <span class="card-id-badge">UCSTT(24-25)-078</span>
+                        <h3>Thet Mon Oo</h3>
+                        <span class="role-text"></span>
+                        <div class="card-social-row">
+                            <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p class="lang-en">&copy; 2026 University of Computer Studies (Thaton). All Rights Reserved.</p>
+            <p class="lang-mm">&copy; 2026 ကွန်ပျူတာတက္ကသိုလ် (သထုံ)။ မူပိုင်ခွင့်များအားလုံး လက်ဝယ်ထားရှိပြီးဖြစ်သည်။</p>
+
+            <p class="lang-en">Empowering the Next Generation of Global Innovators.</p>
+            <p class="lang-mm">မျိုးဆက်သစ် နည်းပညာရှင်များကို ပျိုးထောင်ပေးလျက်ရှိပါသည်။</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- LANGUAGE SWITCHER ENGINE ---
+        function toggleLanguageChoice() {
+            document.body.classList.toggle('lang-burmese');
+            const isBurmese = document.body.classList.contains('lang-burmese');
+            localStorage.setItem('preferredLang', isBurmese ? 'my' : 'en');
+            
+            // Re-render open modal if active to reflect dynamic language
+            const activeModal = document.getElementById('countryModal');
+            if (activeModal && activeModal.classList.contains('active') && window.currentOpenCountryKey) {
+                openCountryDetails(window.currentOpenCountryKey);
+            }
+        }
+
+        function applySavedLanguage() {
+            const savedLang = localStorage.getItem('preferredLang');
+            if (savedLang === 'my') {
+                document.body.classList.add('lang-burmese');
+            }
+        }
+
+        // --- 1. SIDEBAR CONFIGURATOR ---
+        function toggleSidebarSize() {
+            const body = document.body;
+            const icon = document.getElementById('toggleIcon');
+            body.classList.toggle('sidebar-collapsed');
+            icon.className = body.classList.contains('sidebar-collapsed') ? "fas fa-arrow-right" : "fas fa-bars";
+        }
+
+        // --- Auto Reply Chat Mechanics ---
+        function openAutoReplyChat(e) {
+            e.preventDefault();
+            document.getElementById('autoChatBox').classList.add('active');
+        }
+
+        function closeAutoReplyChat() {
+            document.getElementById('autoChatBox').classList.remove('active');
+        }
+
+        function handleChatEnter(e) {
+            if (e.key === 'Enter') sendChatMessage();
+        }
+
+        function sendChatMessage() {
+            const inputField = document.getElementById('chatUserInput');
+            const userText = inputField.value.trim();
+            if (!userText) return;
+
+            const msgBox = document.getElementById('chatMessagesBox');
+            
+            // Append User message
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = 'chat-msg user';
+            userMsgDiv.innerText = userText;
+            msgBox.appendChild(userMsgDiv);
+            
+            inputField.value = '';
+            msgBox.scrollTop = msgBox.scrollHeight;
+
+            // Trigger simulated Auto Reply
+            setTimeout(() => {
+                const botMsgDiv = document.createElement('div');
+                botMsgDiv.className = 'chat-msg bot';
+                botMsgDiv.innerText = getAutoResponse(userText);
+                msgBox.appendChild(botMsgDiv);
+                msgBox.scrollTop = msgBox.scrollHeight;
+            }, 800);
+        }
+
+        function getAutoResponse(text) {
+            const lowText = text.toLowerCase();
+            const isBurmese = document.body.classList.contains('lang-burmese');
+
+            if (lowText.includes('hello') || lowText.includes('hi') || lowText.includes('မင်္ဂလာပါ')) {
+                return isBurmese ? "မင်္ဂလာပါ! ကွန်ပျူတာတက္ကသိုလ်မှ မည်သို့ကူညီပေးရမလဲခင်ဗျာ။" : "Greetings! How can the computer department help you today?";
+            }
+            if (lowText.includes('course') || lowText.includes('major') || lowText.includes('မေဂျာ')) {
+                return isBurmese ? "UCSTT တွင် B.C.Sc. နှင့် B.C.Tech. ဘွဲ့သင်တန်းများကို တက်ရောက်နိုင်ပါသည်။" : "UCSTT currently hosts major pathways leading up to both B.C.Sc. and B.C.Tech degrees.";
+            }
+            if (lowText.includes('project') || lowText.includes('ပရောဂျက်')) {
+                return isBurmese ? "ဒုတိယနှစ်ကျောင်းသားများ၏ NextGen UCSTT ပရောဂျက်ပြပွဲကို ကျင်းပနေပါသည်။" : "The NextGen UCSTT project showcase is currently running, designed actively by our Second Year Innovators.";
+            }
+            if (lowText.includes('help') || lowText.includes('support') || lowText.includes('အကူအညီ')) {
+                return isBurmese ? "အသေးစိတ်မေးမြန်းလိုပါက Contact စာမျက်နှာမှတဆင့် ဆက်သွယ်နိုင်ပါသည်။" : "For technical support or academic inquiries, please contact the UCSTT Support Node via the Contact page.";
+            }
+            return isBurmese ? "သင့်မေးမြန်းချက်ကို လက်ခံရရှိပါသည်။ မကြာမီ ပြန်လည်ဖြေကြားပေးပါမည်။" : "Thank you for reaching out to UCSTT Support Node. Your message has been tracked, and an academic representative will verify your node inquiry shortly.";
+        }
+
+        // --- 2. AUTHENTICATION STORAGE INTERACTION ---
+        let currentLoggedUser = null;
+
+        function syncUserSessionProfile() {
+            const activeStudentData = sessionStorage.getItem('activeStudent');
+            if (!activeStudentData) {
+                alert("Unauthorized Access! Please Sign In from index page first.");
+                window.location.href = "index.html";
+                return;
+            }
+            
+            currentLoggedUser = JSON.parse(activeStudentData);
+
+            document.querySelectorAll('.user-name-badge').forEach(el => el.innerText = currentLoggedUser.name);
+            document.querySelectorAll('.user-roll-badge').forEach(el => el.innerText = currentLoggedUser.roll);
+            document.querySelectorAll('.dropdown-full-name').forEach(el => el.innerText = currentLoggedUser.name);
+            document.querySelectorAll('.dropdown-email').forEach(el => el.innerText = currentLoggedUser.email);
+            document.querySelectorAll('.dropdown-year-major').forEach(el => el.innerText = `${currentLoggedUser.year} (${currentLoggedUser.major})`);
+            document.querySelectorAll('.dropdown-last-login').forEach(el => el.innerText = currentLoggedUser.lastLoginTime || "Just Now");
+
+            const savedPhotoKey = 'profilePhoto_' + currentLoggedUser.roll;
+            const savedPhoto = localStorage.getItem(savedPhotoKey);
+            if (savedPhoto) {
+                document.querySelectorAll('.user-avatar-badge').forEach(el => el.src = savedPhoto);
+                document.querySelectorAll('.dropdown-avatar-img').forEach(el => el.src = savedPhoto);
+            }
+        }
+
+        function toggleProfileDropdown(event) {
+            event.stopPropagation();
+            const card = document.getElementById('dropdownCardNode');
+            if (card.classList.contains('show-card')) {
+                closeProfileDropdown();
+            } else {
+                card.style.display = 'flex';
+                setTimeout(() => card.classList.add('show-card'), 10);
+            }
+        }
+
+        function closeProfileDropdown() {
+            const card = document.getElementById('dropdownCardNode');
+            if(card) {
+                card.classList.remove('show-card');
+                setTimeout(() => { card.style.display = 'none'; }, 200);
+            }
+        }
+
+        function triggerPhotoUpload() {
+            document.getElementById('hiddenAvatarInput').click();
+        }
+
+        function handlePhotoUpdate(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Image = e.target.result;
+                    document.querySelectorAll('.user-avatar-badge').forEach(el => el.src = base64Image);
+                    document.querySelectorAll('.dropdown-avatar-img').forEach(el => el.src = base64Image);
+                    
+                    if (currentLoggedUser) {
+                        const savedPhotoKey = 'profilePhoto_' + currentLoggedUser.roll;
+                        localStorage.setItem(savedPhotoKey, base64Image);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleLogout() {
+            const isBurmese = document.body.classList.contains('lang-burmese');
+            const confirmMsg = isBurmese ? "အကောင့်မှ ထွက်ခွာရန် သေချာပါသလား။" : "Are you sure you want to log out from NextGen UCSTT Node?";
+            if (confirm(confirmMsg)) {
+                sessionStorage.removeItem('activeStudent');
+                window.location.href = "index.html";
+            }
+        }
+
+        // --- 3. GLOBAL MATRIX RECOGNITION DATABASE ---
+        const horizonRegistry = {
+            thailand: { 
+                titleEn: "Kingdom of Thailand Tech Track", 
+                titleMm: "ထိုင်းနိုင်ငံ နည်းပညာနယ်ပယ်",
+                programEn: "MSc in Computer Science & AI at Chulalongkorn University or Asian Institute of Technology (AIT). Special focus fields are IoT Engineering and Agricultural Tech Systems.", 
+                programMm: "Chulalongkorn တက္ကသိုလ် သို့မဟုတ် AIT တွင် ကွန်ပျူတာသိပ္ပံနှင့် AI မဟာဘွဲ့များ။ IoT နှင့် စိုက်ပျိုးရေးနည်းပညာစနစ်များ အဓိကသင်ကြားနိုင်သည်။",
+                jobEn: "High demand for Full Stack Web Developers, Mobile App Architects (iOS/Android), and Localization Engineers in Bangkok tech hubs, Agoda offices, and FinTech startups.",
+                jobMm: "ဘန်ကောက်ရှိ နည်းပညာစင်တာများ၊ Agoda နှင့် FinTech လုပ်ငန်းများတွင် Full Stack Web Developer၊ Mobile App Architect နှင့် Localization Engineer များ လိုအပ်ချက်မြင့်မားပါသည်။"
+            },
+            singapore: { 
+                titleEn: "Singapore Global Tech Hub", 
+                titleMm: "စင်ကာပူ ကမ္ဘာ့နည်းပညာဗဟိုဌာန",
+                programEn: "Advanced Cloud Architecting and Cybersecurity degrees at NUS / NTU Singapore.", 
+                programMm: "NUS နှင့် NTU တက္ကသိုလ်များတွင် အဆင့်မြင့် Cloud နည်းပညာနှင့် ဆိုက်ဘာလုံခြုံရေး ဘာသာရပ်များ။",
+                jobEn: "Massive career pipelines for Cyber Incident Responders, FinTech Blockchain Developers, Data Engineers, and DevSecOps professionals at Google, Grab, and Shopee regional headquarters.",
+                jobMm: "Google, Grab နှင့် Shopee တို့တွင် Cyber Responders, Blockchain Developers, Data Engineers နှင့် DevSecOps ပညာရှင်များအတွက် အခွင့်အလမ်းကောင်းများ ရှိပါသည်။"
+            },
+            japan: { 
+                titleEn: "Japan Automation Horizons", 
+                titleMm: "ဂျပန် စက်ရုပ်နှင့် အလိုအလျောက်စနစ် နယ်ပယ်",
+                programEn: "Robotics Systems Design and Human-Computer Interaction (HCI) at the University of Tokyo / Tokyo Tech.", 
+                programMm: "တိုကျိုတက္ကသိုလ်တွင် စက်ရုပ်နည်းပညာစနစ်နှင့် Human-Computer Interaction (HCI) ဘာသာရပ်များ။",
+                jobEn: "Active opportunities for Embedded Systems Programmers, AI Automation Engineers, and AI Researchers at Sony, Rakuten, and automation institutes.",
+                jobMm: "Sony, Rakuten တို့တွင် Embedded Systems Programmer, AI Automation Engineer နှင့် AI သုတေသီများအဖြစ် လုပ်ကိုင်နိုင်ပါသည်။"
+            },
+            malaysia: { 
+                titleEn: "Malaysia Cloud Ecosystems", 
+                titleMm: "မလေးရှား Cloud နည်းပညာစနစ်",
+                programEn: "Data Science, Business Analytics, and Network Infrastructure Modules at Asia Pacific Industry (APU) / Universiti Malaya.", 
+                programMm: "APU တက္ကသိုလ်နှင့် Universiti Malaya တို့တွင် ဒေတာသိပ္ပံနှင့် ကွန်ရက်အခြေခံအဆောက်အအုံ ဘာသာရပ်များ။",
+                jobEn: "Excellent roles for Cloud Support Specialists, Network Administrators, IT Security Analysts, and E-commerce Platform Managers in Kuala Lumpur and Penang tech clusters.",
+                jobMm: "ကွာလာလမ်ပူနှင့် ပီနန်းရှိ နည်းပညာကုမ္ပဏီများတွင် Cloud Support Specialist, Network Administrator နှင့် IT Security Analyst အလုပ်အကိုင်များ။"
+            },
+            korea: { 
+                titleEn: "South Korea Advanced Hardware & AI", 
+                titleMm: "တောင်ကိုရီးယား အဆင့်မြင့် ဟာ့ဒ်ဝဲလ်နှင့် AI",
+                programEn: "Smart Computing, Deep Learning Research, and Game Development architectures at KAIST and Seoul National University.", 
+                programMm: "KAIST နှင့် ဆိုးလ်အမျိုးသားတက္ကသိုလ်တို့တွင် Deep Learning သုတေသနနှင့် ဂိမ်းဖွံ့ဖြိုးတိုးတက်ရေး ဘာသာရပ်များ။",
+                jobEn: "Strong pipelines for Mobile UI/UX Designers, Game Programmers, AI Training Specialists, and Semiconductor Software Architects at Samsung, Kakao, and Krafton.",
+                jobMm: "Samsung, Kakao, Krafton တို့တွင် UI/UX Designer, Game Programmer နှင့် Semiconductor Software Architect အခွင့်အလမ်းများ။"
+            },
+            germany: { 
+                titleEn: "Germany Industry 4.0 Ecosystem", 
+                titleMm: "ဂျာမနီ စက်မှု ၄.၀ နည်းပညာစနစ်",
+                programEn: "Automotive Software Engineering, Advanced Mechatronics, and Distributed Systems at TU Munich / RWTH Aachen.", 
+                programMm: "TU Munich နှင့် RWTH Aachen တို့တွင် မော်တော်ယာဉ်ဆော့ဖ်ဝဲလ် အင်ဂျင်နီယာနှင့် အဆင့်မြင့် မက္ကထရောနစ် ဘာသာရပ်များ။",
+                jobEn: "High placement rates for DevOps Engineers, Enterprise Java Developers, Automotive Systems Programmers, and SAP Consultants across Munich, Berlin, and Stuttgart.",
+                jobMm: "မြူးနစ်၊ ဘာလင်ရှိ ကုမ္ပဏီများတွင် DevOps Engineer, Java Developer, Automotive Systems Programmer များ လိုအပ်လျက်ရှိပါသည်။"
+            },
+            australia: { 
+                titleEn: "Australia Tech Innovation Sector", 
+                titleMm: "ဩစတြေးလျ နည်းပညာဆန်းသစ်တီထွင်မှု နယ်ပယ်",
+                programEn: "Software Engineering Mastery, Cloud Engineering, and Cyber Defense Tracks at the University of Melbourne / UNSW Sydney.", 
+                programMm: "မဲလ်ဘုန်းတက္ကသိုလ်နှင့် UNSW တို့တွင် ဆော့ဖ်ဝဲလ်အင်ဂျင်နီယာ၊ Cloud နည်းပညာနှင့် ဆိုက်ဘာကာကွယ်ရေး ဘာသာရပ်များ။",
+                jobEn: "Abundant job openings for Solutions Architects, Data Analysts, UI Developers, and IT Consultants in Sydney and Melbourne tech firms like Atlassian and Canva.",
+                jobMm: "Atlassian နှင့် Canva အပါအဝင် ဆစ်ဒနီနှင့် မဲလ်ဘုန်းရှိ ကုမ္ပဏီများတွင် Solutions Architect, Data Analyst, IT Consultant ရာထူးများ။"
+            },
+            usa: { 
+                titleEn: "United States Silicon Valley Hub", 
+                titleMm: "အမေရိကန် စီလီကွန်ဗယ်လီ နည်းပညာဗဟို",
+                programEn: "Computer Science Research, Neural Networks, and Quantum Computing at Stanford, MIT, and UC Berkeley.", 
+                programMm: "Stanford, MIT နှင့် UC Berkeley တို့တွင် ကွန်ပျူတာသိပ္ပံ သုတေသန၊ Neural Networks နှင့် Quantum Computing ဘာသာရပ်များ။",
+                jobEn: "Unlimited opportunities for Machine Learning Engineers, Systems Software Developers, Tech Product Managers, and Cloud Infrastructure Architects in Silicon Valley, Seattle, and Austin.",
+                jobMm: "စီလီကွန်ဗယ်လီ၊ ဆီယက်တဲလ်တို့တွင် Machine Learning Engineer, Systems Software Developer နှင့် Tech Product Manager ရာထူးများ။"
+            },
+            uk: { 
+                titleEn: "United Kingdom Tech & FinTech Sector", 
+                titleMm: "ယူကေ နည်းပညာနှင့် FinTech နယ်ပယ်",
+                programEn: "Data Science, Financial Engineering, and Machine Learning Systems at Oxford, Cambridge, and Imperial College London.", 
+                programMm: "အောက်စဖို့ဒ်၊ ကိန်းဘရစ်ချ်နှင့် Imperial College London တို့တွင် ဒေတာသိပ္ပံနှင့် ဘဏ္ဍာရေးနည်းပညာ ဘာသာရပ်များ။",
+                jobEn: "Strong demand for Quantitative Developers, FinTech Software Engineers, AI Ethics Researchers, and Data Analysts in London's Silicon Roundabout and financial hubs.",
+                jobMm: "လန်ဒန်မြို့ရှိ ဘဏ္ဍာရေးနှင့် နည်းပညာစင်တာများတွင် Quantitative Developer, FinTech Engineer နှင့် Data Analyst အလုပ်အကိုင်များ။"
+            },
+            canada: { 
+                titleEn: "Canada Tech Expansion Ecosystem", 
+                titleMm: "ကနေဒါ နည်းပညာတိုးချဲ့ရေး စနစ်",
+                programEn: "AI Analytics, Cyber Security Strategy, and Big Data Architecture programs at University of Toronto / UBC.", 
+                programMm: "တိုရန်တိုတက္ကသိုလ်နှင့် UBC တို့တွင် AI Analytics၊ ဆိုက်ဘာလုံခြုံရေးနှင့် Big Data တည်ဆောက်ပုံ ဘာသာရပ်များ။",
+                jobEn: "Growing pipelines for Site Reliability Engineers (SRE), Cloud Migration Specialists, Full Stack Developers, and Database Managers across Toronto, Vancouver, and Montreal hubs.",
+                jobMm: "တိုရန်တို၊ ဗန်ကူးဗားတို့တွင် Site Reliability Engineer, Cloud Migration Specialist နှင့် Full Stack Developer အခွင့်အလမ်းများ။"
+            }
+        };
+
+        function openCountryDetails(countryKey) {
+            window.currentOpenCountryKey = countryKey;
+            const countryData = horizonRegistry[countryKey];
+            if (!countryData) return;
+
+            const isBurmese = document.body.classList.contains('lang-burmese');
+            const title = isBurmese ? countryData.titleMm : countryData.titleEn;
+            const program = isBurmese ? countryData.programMm : countryData.programEn;
+            const job = isBurmese ? countryData.jobMm : countryData.jobEn;
+
+            document.getElementById('modalCountryTitle').innerHTML = `<i class="fas fa-globe"></i> ${title}`;
+            document.getElementById('modalItProgram').innerText = program;
+            document.getElementById('modalJobOpp').innerText = job;
+            document.getElementById('countryModal').classList.add('active');
+        }
+
+        function hideModal() { document.getElementById('countryModal').classList.remove('active'); }
+        function closeCountryModal(event) { if (event.target.id === "countryModal") hideModal(); }
+
+        // --- 4. REALTIME TELEMETRY SYSTEM CLOCK ---
+        function executeScheduleTelemetry() {
+            const now = new Date();
+            let hours = now.getHours(), minutes = now.getMinutes(), seconds = now.getSeconds();
+            let ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            document.getElementById('live-time-display').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+        }
+        setInterval(executeScheduleTelemetry, 1000);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            applySavedLanguage();
+            syncUserSessionProfile();
+            executeScheduleTelemetry();
+        });
+        window.onclick = function() { closeProfileDropdown(); }
+    </script>
+</body>
+</html>

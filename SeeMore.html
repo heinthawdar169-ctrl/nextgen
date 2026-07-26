@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Portals | NextGen UCSTT</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #A51C30;       /* Thaton Crimson */
+            --oxford-blue: #002147;   /* Oxford Blue */
+            --deep-navy: #001c3d;      
+            --accent: #C49619;        /* Ivy League Gold */
+            --light-bg: #f8fafc;      
+            --white: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            --sidebar-width: 280px;
+            --topbar-height: 70px;
+        }
+
+        body.sidebar-collapsed {
+            --sidebar-width: 85px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #fafcff;
+            color: var(--oxford-blue);
+            line-height: 1.7;
+            display: flex;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        /* --- LEFT NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--oxford-blue) 0%, #001229 100%);
+            border-right: 4px solid var(--accent);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            z-index: 1000;
+            box-shadow: 4px 0 25px rgba(0,0,0,0.15);
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        body.sidebar-collapsed nav { padding: 30px 10px; }
+
+        .nav-brand-area {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .nav-logo {
+            height: 85px;
+            width: auto;
+            transition: var(--transition);
+            filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.2));
+        }
+        body.sidebar-collapsed .nav-logo { height: 45px; }
+        body.sidebar-collapsed .nav-brand-area h2 { display: none !important; }
+
+        .nav-links { width: 100%; flex-grow: 1; overflow-y: auto; }
+        .nav-links ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            padding: 12px 18px;
+            border-radius: 8px;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        body.sidebar-collapsed .nav-links a { justify-content: center; padding: 12px 0; }
+        body.sidebar-collapsed .nav-links span { display: none; }
+        .nav-links a i { font-size: 1.1rem; width: 24px; text-align: center; color: var(--accent); }
+
+        .nav-links a:hover, .nav-links li.active a {
+            color: var(--white);
+            background: rgba(255, 255, 255, 0.08);
+            border-left: 4px solid var(--primary);
+            padding-left: 22px;
+        }
+
+        /* --- TOP TELEMETRY BAR --- */
+        .top-telemetry-bar {
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            height: var(--topbar-height);
+            background: var(--white);
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 999;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            transition: var(--transition);
+        }
+
+        .topbar-left-zone { display: flex; align-items: center; gap: 16px; }
+
+        .sidebar-toggle-btn {
+            background: var(--oxford-blue);
+            color: var(--white);
+            border: 2px solid var(--accent);
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+
+        .live-clock-widget {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f1f5f9;
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #002147;
+            border: 1px solid #e2e8f0;
+            border-radius: 50px;
+        }
+        .live-clock-widget i { color: #ef4444; }
+
+        .topbar-right-zone { display: flex; align-items: center; position: relative; }
+
+        .profile-trigger {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 6px 18px 6px 8px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 50px; 
+            transition: var(--transition);
+            height: 48px;
+        }
+
+        .avatar-frame-container { position: relative; width: 34px; height: 34px; flex-shrink: 0; }
+        .user-avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); background: #f1f5f9; }
+        .status-online-dot { position: absolute; bottom: -1px; right: -1px; width: 9px; height: 9px; background-color: #10b981; border: 2px solid var(--white); border-radius: 50%; z-index: 2; }
+        .profile-trigger-info { display: flex; flex-direction: column; text-align: left; }
+        .profile-trigger-info .user-name { font-size: 0.88rem; font-weight: 700; color: #002147; }
+        .profile-trigger-info .user-id-badge { font-size: 0.72rem; color: #64748b; font-weight: 500; }
+
+        /* --- STUDY WORKSPACE --- */
+        .main-workspace {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--topbar-height);
+            width: calc(100% - var(--sidebar-width));
+            min-height: calc(100vh - var(--topbar-height));
+            transition: var(--transition);
+            padding: 40px;
+        }
+
+        .workspace-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .workspace-header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--oxford-blue);
+        }
+
+        .workspace-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin-top: 5px;
+        }
+
+        /* --- CLASSROOM BUTTON PORTALS --- */
+        .portal-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .portal-card {
+            background: var(--white);
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            width: 380px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 33, 71, 0.03);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: #cbd5e1;
+            transition: var(--transition);
+        }
+
+        /* CS Portal Style colors */
+        .portal-card.cs-type:hover {
+            border-color: var(--primary);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(165, 28, 48, 0.1);
+        }
+        .portal-card.cs-type::before { background: var(--primary); }
+
+        /* CT Portal Style colors */
+        .portal-card.ct-type:hover {
+            border-color: var(--accent);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(196, 150, 25, 0.15);
+        }
+        .portal-card.ct-type::before { background: var(--accent); }
+
+        .portal-icon-container {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px auto;
+            font-size: 2.2rem;
+            transition: var(--transition);
+        }
+
+        .cs-type .portal-icon-container { background: rgba(165, 28, 48, 0.05); color: var(--primary); }
+        .ct-type .portal-icon-container { background: rgba(196, 150, 25, 0.08); color: var(--accent); }
+
+        .portal-card h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        .cs-type h2 { color: var(--oxford-blue); }
+        .ct-type h2 { color: var(--oxford-blue); }
+
+        .portal-card p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 35px;
+            min-height: 50px;
+        }
+
+        .portal-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 12px;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+        }
+
+        .cs-type .portal-btn {
+            background: var(--oxford-blue);
+            color: var(--white);
+            border: 2px solid var(--oxford-blue);
+        }
+        .cs-type .portal-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .ct-type .portal-btn {
+            background: var(--oxford-blue);
+            color: var(--white);
+            border: 2px solid var(--oxford-blue);
+        }
+        .ct-type .portal-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* --- RESPONSIVE WORKSPACE --- */
+        @media (max-width: 1024px) {
+            body { flex-direction: column; }
+            nav { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 4px solid var(--accent); padding: 15px; }
+            .nav-brand-area { display: flex; flex-direction: column; align-items: center; }
+            .nav-logo { height: 55px; }
+            .nav-links ul { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            
+            .top-telemetry-bar { position: relative; left: 0; width: 100%; flex-direction: column; padding: 15px; height: auto; gap: 10px; }
+            .topbar-left-zone, .topbar-right-zone { width: 100%; justify-content: center; }
+            .sidebar-toggle-btn { display: none; }
+            
+            .main-workspace { margin-left: 0; margin-top: 0; width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR NAVIGATION -->
+    <nav id="sidebarNode">
+        <div class="nav-brand-area">
+            <a href="homePage.html"><img src="imageForProject/UCSTT Logo(true).png" alt="UCSTT Logo" class="nav-logo"></a>
+            <h2 style="color: var(--white); font-size: 0.95rem; font-weight: 800; margin-top: 10px; letter-spacing: 1px;">NextGen UCSTT</h2>
+        </div>
+        
+        <div class="nav-links">
+            <ul>
+                <li><a href="homePage.html"><i class="fas fa-home"></i> <span>HOME</span></a></li>
+                <li><a href="about.html"><i class="fas fa-info-circle"></i> <span>ABOUT</span></a></li>
+                <li><a href="gallery.html"><i class="fas fa-images"></i> <span>GALLERY</span></a></li>
+                <li><a href="feedBack.html"><i class="fas fa-comment-alt"></i> <span>FEEDBACK</span></a></li>
+                <li><a href="contact.html"><i class="fas fa-envelope"></i> <span>CONTACT</span></a></li>
+                <li><a href="network.html"><i class="fas fa-network-wired"></i> <span>COMMUNICATION</span></a></li>
+                <li><a href="learnHtmlCssJs.html"><i class="fas fa-graduation-cap"></i> <span>LEARNING</span></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HEADER TOPBAR MENU -->
+    <div class="top-telemetry-bar">
+        <div class="topbar-left-zone">
+            <button class="sidebar-toggle-btn" onclick="toggleSidebarSize()">
+                <i class="fas fa-bars" id="toggleIcon"></i>
+            </button>
+            <div class="live-clock-widget">
+                <i class="far fa-clock"></i>
+                <span id="live-time-display">00:00:00 AM</span>
+            </div>
+        </div>
+
+        <div class="topbar-right-zone">
+            <div class="profile-trigger">
+                <div class="avatar-frame-container">
+                    <img src="photo_2025-11-08_11-17-04.jpg" alt="Student Pic" class="user-avatar-badge user-avatar-img">
+                    <div class="status-online-dot"></div>
+                </div>
+                <div class="profile-trigger-info">
+                    <span class="user-name-badge user-name">Loading Profile...</span>
+                    <span class="user-roll-badge user-id-badge">UCSTT(24-25)-000</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN INTERACTIVE HUB AREA -->
+    <div class="main-workspace">
+        <div class="workspace-header">
+            <h1>Academic Specialization Hub</h1>
+            <p>Select your assigned department module pathway below to access your classes.</p>
+        </div>
+
+        <div class="portal-grid">
+            <!-- Computer Science (CS) Entrance Pathway -->
+            <div class="portal-card cs-type">
+                <div class="portal-icon-container">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h2>Computer Science</h2>
+                <p>Access software schemas, algorithms, backend architecture, artificial intelligence neural systems, and database compilation labs.</p>
+                <a href="csClassroom.html" class="portal-btn">
+                    <span>ENTER CS PORTAL</span> <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Computer Technology (CT) Entrance Pathway -->
+            <div class="portal-card ct-type">
+                <div class="portal-icon-container">
+                    <i class="fas fa-microchip"></i>
+                </div>
+                <h2>Computer Technology</h2>
+                <p>Access structural hardware engineering components, communication systems protocols, embedded node logic, and data signal network grids.</p>
+                <a href="ctClassroom.html" class="portal-btn">
+                    <span>ENTER CT PORTAL</span> <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebarSize() {
+            const body = document.body;
+            const icon = document.getElementById('toggleIcon');
+            body.classList.toggle('sidebar-collapsed');
+            icon.className = body.classList.contains('sidebar-collapsed') ? "fas fa-arrow-right" : "fas fa-bars";
+        }
+
+        // --- AUTHENTICATION RETRIEVAL SCHEME ---
+        function syncUserSessionProfile() {
+            const activeStudentData = sessionStorage.getItem('activeStudent');
+            if (!activeStudentData) {
+                alert("Unauthorized Access! Please Sign In from index page first.");
+                window.location.href = "index.html";
+                return;
+            }
+            
+            const currentLoggedUser = JSON.parse(activeStudentData);
+
+            document.querySelectorAll('.user-name-badge').forEach(el => el.innerText = currentLoggedUser.name);
+            document.querySelectorAll('.user-roll-badge').forEach(el => el.innerText = currentLoggedUser.roll);
+
+            const savedPhotoKey = 'profilePhoto_' + currentLoggedUser.roll;
+            const savedPhoto = localStorage.getItem(savedPhotoKey);
+            if (savedPhoto) {
+                document.querySelectorAll('.user-avatar-badge').forEach(el => el.src = savedPhoto);
+            }
+        }
+
+        // --- CLOCK MONITOR TELEMETRY ---
+        function executeScheduleTelemetry() {
+            const now = new Date();
+            let hours = now.getHours(), minutes = now.getMinutes(), seconds = now.getSeconds();
+            let ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            document.getElementById('live-time-display').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+        }
+        setInterval(executeScheduleTelemetry, 1000);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            syncUserSessionProfile();
+            executeScheduleTelemetry();
+        });
+    </script>
+</body>
+</html>

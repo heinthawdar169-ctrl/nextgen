@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCSTT | Student Feedback Portal</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* --- Root Styling Framework --- */
+        :root {
+            --primary: #A51C30;       /* Harvard Crimson */
+            --oxford-blue: #002147;   /* Oxford Blue */
+            --accent: #C49619;        /* Ivy League Gold */
+            --light-bg: #f8f9fa;      
+            --white: #ffffff;
+            --transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            --success: #10b981;       
+            --star-gold: #ffc107;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f3f3f1;
+            color: var(--oxford-blue);
+            padding: 40px 8%;
+        }
+
+        .feedback-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .feedback-container { grid-template-columns: 1fr; }
+        }
+
+        /* --- FORM STYLING --- */
+        .feedback-form-card {
+            background: var(--white);
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--primary);
+            position: sticky;
+            top: 40px;
+            height: fit-content;
+        }
+
+        .feedback-form-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .feedback-form-card p {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            background: #fafafa;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(165, 28, 48, 0.1);
+        }
+
+        /* Interactive Star Rating CSS */
+        .star-rating {
+            display: flex;
+            gap: 8px;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            margin-bottom: 5px;
+        }
+
+        .star-rating input { display: none; }
+
+        .star-rating label {
+            font-size: 1.8rem;
+            color: #e0e0e0;
+            cursor: pointer;
+            transition: var(--transition);
+            margin: 0;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label,
+        .star-rating input:checked ~ label {
+            color: var(--star-gold);
+            transform: scale(1.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--oxford-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(165, 28, 48, 0.2);
+        }
+
+        /* --- DYNAMIC FEED STYLING --- */
+        .feedback-feed-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Category Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            background: #e9ecef;
+            padding: 6px;
+            border-radius: 10px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: transparent;
+            border: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: #555;
+        }
+
+        .filter-btn.active {
+            background: var(--white);
+            color: var(--oxford-blue);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .review-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+            border-left: 5px solid var(--accent);
+            animation: fadeIn 0.4s ease-out;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .student-meta h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--oxford-blue);
+        }
+
+        .student-meta span {
+            font-size: 0.75rem;
+            color: #888;
+            font-weight: 500;
+        }
+
+        .review-stars {
+            color: var(--star-gold);
+            font-size: 0.9rem;
+        }
+
+        .review-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #e6f0fa;
+            color: #0056b3;
+            font-size: 0.65rem;
+            font-weight: 700;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .review-body {
+            font-size: 0.9rem;
+            color: #444;
+            line-height: 1.5;
+        }
+
+        .delete-review-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #ccc;
+            cursor: pointer;
+            transition: 0.2s;
+            display: none; /* Shows up on hover */
+        }
+
+        .review-card:hover .delete-review-btn {
+            display: block;
+        }
+
+        .delete-review-btn:hover {
+            color: var(--primary);
+        }
+
+        .no-feedback {
+            text-align: center;
+            padding: 40px;
+            background: var(--white);
+            border-radius: 12px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* --- MAGIC DYNAMIC HOME BUTTON STYLING --- */
+        .magic-home-wrapper {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 9999;
+        }
+
+        .magic-home-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--oxford-blue) 0%, #004080 50%, var(--primary) 100%);
+            background-size: 200% auto;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 50px;
+            border: 2px solid var(--accent);
+            box-shadow: 0 8px 25px rgba(0, 33, 71, 0.35), inset 0 2px 5px rgba(255,255,255,0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-position 0.8s ease;
+            cursor: pointer;
+        }
+
+        /* Animated Dynamic Shifts on Hover */
+        .magic-home-btn:hover {
+            transform: translateY(-6px) scale(1.04);
+            background-position: right center;
+            box-shadow: 0 15px 30px rgba(165, 28, 48, 0.4), 0 0 15px rgba(196, 150, 25, 0.5);
+            color: #fff;
+        }
+
+        /* Icon Animation Toggle Frame */
+        .magic-home-btn .fa-home {
+            transition: transform 0.3s ease, opacity 0.2s ease;
+        }
+        .magic-home-btn .fa-arrow-left {
+            display: none;
+        }
+
+        .magic-home-btn:hover .fa-home {
+            display: none;
+        }
+        .magic-home-btn:hover .fa-arrow-left {
+            display: inline-block;
+            animation: bounceLeft 0.8s infinite alternate;
+        }
+
+        @keyframes bounceLeft {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-4px); }
+        }
+
+        /* Click Ripple Feedback Aura */
+        .magic-home-btn:active {
+            transform: translateY(-2px) scale(0.98);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--oxford-blue);">UCSTT Quality Assurance</h1>
+        <p style="color: #666; font-size: 0.95rem;">Real-time student feedback collection engine.</p>
+    </div>
+
+    <div class="feedback-container">
+        
+        <div class="feedback-form-card">
+            <h2>Submit Feedback</h2>
+            <p>Your opinions help improve the UCSTT digital campus ecosystem.</p>
+            
+            <form id="feedbackForm" onsubmit="handleFeedbackSubmit(event)">
+                <div class="form-group">
+                    <label>Full Name / Roll Number</label>
+                    <input type="text" id="feedbackAuthor" class="form-control" placeholder="e.g., Thawdar Hein (081)" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="feedbackCategory" class="form-control" required>
+                        <option value="Lecture Plans">Lecture Plans & Coursework</option>
+                        <option value="Auto-Reply">Auto-Reply Chatbot Performance</option>
+                        <option value="UI/UX Design">Portal Design & Interface</option>
+                        <option value="Campus Facilities">Facilities & Operations</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Experience Rating</label>
+                    <div class="star-rating">
+                        <input type="radio" id="star5" name="rating" value="5" required><label Jimmy for="star5" class="fas fa-star"></label>
+                        <input type="radio" id="star4" name="rating" value="4"><label for="star4" class="fas fa-star"></label>
+                        <input type="radio" id="star3" name="rating" value="3"><label for="star3" class="fas fa-star"></label>
+                        <input type="radio" id="star2" name="rating" value="2"><label for="star2" class="fas fa-star"></label>
+                        <input type="radio" id="star1" name="rating" value="1"><label for="star1" class="fas fa-star"></label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Detailed Review</label>
+                    <textarea id="feedbackText" class="form-control" rows="4" placeholder="Write down structural recommendations or system bugs..." required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Publish Review</button>
+            </form>
+        </div>
+
+        <div class="feedback-feed-column">
+            
+            <div class="filter-tabs">
+                <button class="filter-btn active" onclick="filterReviews('All', this)">All Feedbacks</button>
+                <button class="filter-btn" onclick="filterReviews('Lecture Plans', this)">Coursework</button>
+                <button class="filter-btn" onclick="filterReviews('Auto-Reply', this)">Chatbot</button>
+                <button class="filter-btn" onclick="filterReviews('UI/UX Design', this)">Design</button>
+            </div>
+
+            <div id="liveFeedbackFeed"></div>
+        </div>
+
+    </div>
+
+    <div class="magic-home-wrapper">
+        <a href="thirdYearHomePage.html" class="magic-home-btn">
+            <i class="fas fa-home"></i>
+            <i class="fas fa-arrow-left"></i>
+            <span>Return Home</span>
+        </a>
+    </div>
+
+    <script>
+        // Default Mock Database to show something cool initially on project launch
+        const initialMockData = [
+            {
+                id: 1717934400000,
+                author: "Shoon Lae Thawdar",
+                category: "Lecture Plans",
+                rating: 5,
+                text: "The Single Page Application setup is extremely lightning fast. Switching module outlines takes under 200ms!",
+                date: "June 08, 2026"
+            },
+            {
+                id: 1717934500000,
+                author: "Anonymous Student",
+                category: "Auto-Reply",
+                rating: 4,
+                text: "The Local Chatbot answers immediately when I query about Java rooms, but I hope it supports more language variations soon.",
+                date: "June 09, 2026"
+            }
+        ];
+
+        // Load storage arrays or inject default mock objects safely
+        let database = JSON.parse(localStorage.getItem('ucstt_feedbacks'));
+        if (!database || database.length === 0) {
+            database = initialMockData;
+            localStorage.setItem('ucstt_feedbacks', JSON.stringify(database));
+        }
+
+        let dynamicActiveFilter = "All";
+
+        // Display current local array context down onto viewport target tags
+        function renderReviewFeed() {
+            const feedContainer = document.getElementById('liveFeedbackFeed');
+            feedContainer.innerHTML = '';
+
+            // Filter context matches logic
+            const targetDataset = dynamicActiveFilter === "All" 
+                ? database 
+                : database.filter(item => item.category === dynamicActiveFilter);
+
+            if (targetDataset.length === 0) {
+                feedContainer.innerHTML = `<div class="no-feedback">No reviews published under "${dynamicActiveFilter}" yet.</div>`;
+                return;
+            }
+
+            // Map data items sequentially into standard dashboard structure 
+            targetDataset.forEach(review => {
+                let starsHtml = '';
+                for(let i = 1; i <= 5; i++) {
+                    starsHtml += `<i class="${i <= review.rating ? 'fas' : 'far'} fa-star"></i>`;
+                }
+
+                const cardHtml = `
+                    <div class="review-card" data-id="${review.id}">
+                        <button class="delete-review-btn" onclick="deleteReview(${review.id})"><i class="fas fa-trash-alt"></i></button>
+                        <div class="review-header">
+                            <div class="student-meta">
+                                <h4>${escapeHtml(review.author)}</h4>
+                                <span>Published: ${review.date}</span>
+                            </div>
+                            <div class="review-stars">${starsHtml}</div>
+                        </div>
+                        <span class="review-tag">${review.category}</span>
+                        <p class="review-body">${escapeHtml(review.text)}</p>
+                    </div>
+                `;
+                feedContainer.innerHTML += cardHtml;
+            });
+        }
+
+        // Processing form collection parameters
+        function handleFeedbackSubmit(event) {
+            event.preventDefault();
+
+            const authorInput = document.getElementById('feedbackAuthor');
+            const categorySelect = document.getElementById('feedbackCategory');
+            const textInput = document.getElementById('feedbackText');
+            
+            // Evaluates selected radio inputs metrics safely
+            const checkedRating = document.querySelector('input[name="rating"]:checked');
+            if (!checkedRating) return;
+
+            const newReviewObject = {
+                id: Date.now(),
+                author: authorInput.value.trim(),
+                category: categorySelect.value,
+                rating: parseInt(checkedRating.value),
+                text: textInput.value.trim(),
+                date: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
+            };
+
+            // Unshift inserts element at array index 0 (top of the feed)
+            database.unshift(newReviewObject);
+            localStorage.setItem('ucstt_feedbacks', JSON.stringify(database));
+
+            // Reset standard parameters across UI fields smoothly
+            event.target.reset();
+            renderReviewFeed();
+        }
+
+        // Filter engine execution logic
+        function filterReviews(category, element) {
+            dynamicActiveFilter = category;
+            
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+
+            renderReviewFeed();
+        }
+
+        // Clear unwanted objects out of storage safely
+        function deleteReview(id) {
+            database = database.filter(item => item.id !== id);
+            localStorage.setItem('ucstt_feedbacks', JSON.stringify(database));
+            renderReviewFeed();
+        }
+
+        // Protect layout strings from script insertion issues
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        // Initialize Runtime Rendering Subsystems
+        window.addEventListener('DOMContentLoaded', () => {
+            renderReviewFeed();
+        });
+    </script>
+
+</body>
+</html>

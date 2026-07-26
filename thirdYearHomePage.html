@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCSTT | University of Computer Studies (Thaton)</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* --- Root Brand Variables --- */
+        :root {
+            --primary: #A51C30;       /* Thaton Crimson */
+            --oxford-blue: #002147;   /* Oxford Blue */
+            --accent: #C49619;        /* Ivy League Gold */
+            --light-bg: #f8fafc;      /* Heritage Surface Off-White */
+            --white: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            --sidebar-width: 280px;
+            --topbar-height: 70px;
+        }
+
+        body.sidebar-collapsed {
+            --sidebar-width: 85px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--oxford-blue);
+            line-height: 1.7;
+            display: flex;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        /* --- 1. MODERN LEFT-SIDE SIDEBAR NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--oxford-blue) 0%, #001229 100%);
+            border-right: 4px solid var(--accent);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            z-index: 1000;
+            box-shadow: 4px 0 25px rgba(0,0,0,0.15);
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        body.sidebar-collapsed nav {
+            padding: 30px 10px;
+        }
+
+        .nav-brand-area {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .nav-logo {
+            height: 85px;
+            width: auto;
+            transition: var(--transition);
+            filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.2));
+        }
+        .nav-logo:hover { transform: scale(1.05); }
+
+        body.sidebar-collapsed .nav-logo { height: 45px; }
+        body.sidebar-collapsed .nav-brand-area h2 { display: none !important; }
+
+        .nav-links { width: 100%; flex-grow: 1; }
+        .nav-links ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            padding: 12px 18px;
+            border-radius: 8px;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        body.sidebar-collapsed .nav-links a { justify-content: center; padding: 12px 0; }
+        body.sidebar-collapsed .nav-links span { display: none; }
+
+        .nav-links a i {
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+            color: var(--accent);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover, .nav-links li.active a {
+            color: var(--white);
+            background: rgba(255, 255, 255, 0.08);
+            border-left: 4px solid var(--primary);
+            padding-left: 22px;
+        }
+
+        body.sidebar-collapsed .nav-links a:hover, 
+        body.sidebar-collapsed .nav-links li.active a {
+            padding-left: 0;
+            border-left: none;
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--accent);
+        }
+
+        /* --- SIDEBAR QUICK LINKS (MOVED FROM TOPBAR) --- */
+        .sidebar-bottom-telemetry {
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        body.sidebar-collapsed .sidebar-bottom-telemetry h4 { display: none; }
+        .sidebar-bottom-telemetry h4 {
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        .sidebar-icon-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: flex-start;
+        }
+        body.sidebar-collapsed .sidebar-icon-grid { justify-content: center; }
+        
+        .sb-quick-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .sb-quick-btn:hover {
+            background: var(--accent);
+            color: var(--oxford-blue);
+            transform: translateY(-2px);
+        }
+        .sb-quick-btn.red-alert:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        /* --- 2. CLEAN & STREAMLINED TOP TELEMETRY BAR --- */
+        .top-telemetry-bar {
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            height: var(--topbar-height);
+            background: var(--white);
+            border-bottom: 1px solid #e2e8f0;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr; /* Central focus for Dynamic Subject text */
+            align-items: center;
+            padding: 0 30px;
+            z-index: 999;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            transition: var(--transition);
+        }
+
+        .topbar-left-zone {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-toggle-btn {
+            background: var(--oxford-blue);
+            color: var(--white);
+            border: 1px solid var(--accent);
+            width: 34px;
+            height: 34px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+        .sidebar-toggle-btn:hover { background: var(--primary); }
+
+        .live-clock-widget {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--oxford-blue);
+        }
+        .live-clock-widget i { color: var(--primary); }
+
+        /* DYNAMIC SUBJECT CENTER HUD */
+        .topbar-center-hub {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .live-timetable-tracker-badge {
+            background: linear-gradient(90deg, rgba(165,28,48,0.08) 0%, rgba(0,33,71,0.05) 100%);
+            border: 1px dashed var(--primary);
+            padding: 8px 24px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 90%;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+
+        .live-timetable-tracker-badge:hover {
+            border-style: solid;
+            background: linear-gradient(90deg, rgba(165,28,48,0.12) 0%, rgba(196,150,25,0.08) 100%);
+        }
+
+        .status-pulse {
+            width: 10px;
+            height: 10px;
+            background-color: #10b981;
+            border-radius: 50%;
+            animation: pulseWave 1.8s infinite;
+            flex-shrink: 0;
+        }
+        @keyframes pulseWave {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.6; }
+        }
+
+        #class-status-text {
+            font-size: 0.88rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            color: var(--oxford-blue);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .topbar-right-zone {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        .premium-news-console {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .news-badge-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+            white-space: nowrap;
+            text-decoration: none;
+        }
+        .news-badge-item:hover {
+            background: var(--light-bg);
+            border-color: var(--accent);
+            color: var(--primary);
+        }
+        .news-badge-item i { color: var(--accent); }
+
+        /* --- 3. MAIN WORKSPACE VIEW CONTAINER --- */
+        .main-workspace {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--topbar-height);
+            width: calc(100% - var(--sidebar-width));
+            min-height: calc(100vh - var(--topbar-height));
+            transition: var(--transition);
+        }
+
+        /* --- HERO HEADER ADJUSTMENTS --- */
+        .header {
+            height: 65vh;
+            background: linear-gradient(rgba(0, 33, 71, 0.4), rgba(165, 28, 48, 0.2)), 
+                        url('imageForProject/UcsttEntranceGate.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            padding: 0 20px;
+        }
+
+        .text-box h1 { font-size: 2.8rem; font-weight: 800; text-shadow: 2px 2px 10px rgba(0,0,0,0.6); }
+        .text-box p { font-size: 1.05rem; margin-bottom: 2rem; text-shadow: 1px 1px 5px rgba(0,0,0,0.6); }
+
+        .hero-btn {
+            padding: 0.8rem 2.5rem;
+            background: var(--primary);
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid var(--accent);
+            transition: var(--transition);
+        }
+        .hero-btn:hover { background: var(--white); color: var(--primary); }
+
+        section { padding: 60px 5%; text-align: center; }
+        .row { display: flex; justify-content: space-between; gap: 1.5rem; margin-top: 40px; flex-wrap: wrap; }
+
+        .course-col {
+            flex: 1;
+            min-width: 250px;
+            background: var(--light-bg);
+            padding: 30px 20px;
+            border-top: 5px solid var(--oxford-blue);
+            transition: var(--transition);
+        }
+        .course-col:hover { border-top-color: var(--primary); transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.05); }
+        .course-col h3 { margin-bottom: 15px; color: var(--primary); }
+
+        .internship-section { background-color: var(--light-bg); }
+        .intern-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        .intern-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 30px 25px;
+            text-align: left;
+            border-left: 5px solid var(--primary);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+            transition: var(--transition);
+        }
+        .intern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            border-left-color: var(--accent);
+        }
+        .intern-icon { font-size: 2rem; color: var(--oxford-blue); margin-bottom: 15px; }
+        .intern-card h3 { font-size: 1.2rem; color: var(--oxford-blue); margin-bottom: 12px; }
+        .intern-card p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px; }
+        .intern-download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--oxford-blue);
+            color: var(--white);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: var(--transition);
+        }
+        .intern-download-btn:hover { background: var(--primary); }
+
+        /* --- INFINITE TRAIN TRACK MULTI-CAROUSEL --- */
+        .marquee-wrapper-container {
+            width: 100%;
+            overflow: hidden;
+            padding: 30px 0;
+            position: relative;
+            background: #fafafa;
+            border-top: 1px solid #f1f5f9;
+            border-bottom: 1px solid #f1f5f9;
+            margin-top: 30px;
+        }
+        
+        .train-marquee-track {
+            display: flex;
+            width: max-content;
+            gap: 25px;
+            animation: trainMoveLoop 35s linear infinite;
+        }
+        
+        .marquee-wrapper-container:hover .train-marquee-track {
+            animation-play-state: paused;
+        }
+        
+        @keyframes trainMoveLoop {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-50% - 12.5px)); }
+        }
+
+        .campus-col {
+            flex-shrink: 0;
+            width: 260px;
+            position: relative;
+            overflow: hidden;
+            border: 6px solid var(--white);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            height: 260px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .campus-col img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        .campus-col:hover img {
+            transform: scale(1.1);
+        }
+        .layer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(transparent, rgba(0, 33, 71, 0.95));
+            color: var(--white);
+            padding: 25px 15px 15px 15px;
+            transition: var(--transition);
+            text-align: left;
+        }
+        .campus-col:hover .layer {
+            background: linear-gradient(transparent, rgba(165, 28, 48, 0.98));
+        }
+        .layer h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; color: var(--white); }
+        .layer span { font-size: 0.75rem; color: var(--accent); display: block; margin-top: 2px; font-weight: 500; }
+
+        /* --- DYNAMIC MODAL BOXES --- */
+        .horizon-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 18, 41, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 5000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .horizon-modal.active { display: flex; opacity: 1; }
+        .modal-content {
+            background: var(--white);
+            width: 100%;
+            max-width: 600px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            border: 3px solid var(--accent);
+            transform: scale(0.85);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .horizon-modal.active .modal-content { transform: scale(1); }
+        .modal-header { background: var(--oxford-blue); color: var(--white); padding: 20px 25px; position: relative; }
+        .modal-header h2 { font-size: 1.5rem; color: var(--white); display: flex; align-items: center; gap: 10px; }
+        .close-modal-btn { position: absolute; top: 20px; right: 25px; color: rgba(255,255,255,0.7); font-size: 1.5rem; cursor: pointer; transition: var(--transition); }
+        .close-modal-btn:hover { color: var(--accent); }
+        .modal-body { padding: 30px; text-align: left; }
+        .info-block { margin-bottom: 25px; }
+        .info-block h4 { color: var(--primary); font-size: 1rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #f1f5f9; padding-bottom: 4px; }
+        .info-block p { font-size: 0.9rem; color: var(--text-main); }
+
+
+        /* --- 4. COMPACT & HIGHLY CREATIVE TEAM DASHBOARD GRID (NEW STYLE) --- */
+        .creators-section { 
+            padding: 80px 6%; 
+            background: #fafcff;
+            text-align: center; 
+        }
+        .creators-section h1 { font-size: 2.2rem; font-weight: 800; color: var(--oxford-blue); }
+        .creators-title-line { width: 70px; height: 5px; background: linear-gradient(90deg, var(--primary), var(--accent)); margin: 12px auto 20px auto; border-radius: 10px; }
+        .section-subtitle { font-size: 0.95rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 40px auto; }
+        
+        .team-compact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .team-glass-card {
+            background: var(--white);
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            transition: var(--transition);
+        }
+
+        .team-glass-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(165, 28, 48, 0.3);
+            box-shadow: 0 12px 25px rgba(165, 28, 48, 0.08);
+        }
+
+        /* Ambient colored tag line on hover */
+        .team-glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--oxford-blue);
+            transition: var(--transition);
+        }
+        .team-glass-card:hover::before {
+            background: var(--primary);
+        }
+
+        .card-avatar-wrapper {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid #f1f5f9;
+            position: relative;
+        }
+
+        .card-avatar-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        .team-glass-card:hover .card-avatar-wrapper img {
+            transform: scale(1.1);
+        }
+
+        .card-info-pane {
+            text-align: left;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-id-badge {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--primary);
+            background: rgba(165, 28, 48, 0.05);
+            padding: 2px 8px;
+            border-radius: 4px;
+            width: max-content;
+            margin-bottom: 5px;
+            border: 1px solid rgba(165, 28, 48, 0.08);
+        }
+
+        .card-info-pane h3 {
+            font-size: 1.05rem;
+            color: var(--oxford-blue);
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .card-info-pane .role-text {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .card-social-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .card-social-row a {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+        .card-social-row a:hover {
+            color: var(--primary);
+        }
+
+
+        /* --- CHAT WIDGET STYLES --- */
+        #ai-chat-container { position: fixed; bottom: 20px; right: 20px; z-index: 3000; }
+        #chat-circle { width: 55px; height: 55px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; box-shadow: 0 4px 15px rgba(165, 28, 48, 0.4); border: 2px solid var(--accent); }
+        #chat-box { display: none; position: fixed; bottom: 90px; right: 20px; width: 320px; height: 440px; background: var(--white); border-radius: 15px; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.2); overflow: hidden; border: 1px solid #ddd; }
+        .chat-header { background: var(--oxford-blue); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        #chat-messages { flex-grow: 1; padding: 15px; overflow-y: auto; background: #f9f9f9; font-size: 0.85rem; display: flex; flex-direction: column; }
+        .message { margin-bottom: 12px; padding: 10px 14px; border-radius: 15px; max-width: 85%; word-wrap: break-word; }
+        .bot-msg { background: #e9e9e9; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; }
+        .user-msg { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .chat-input-area { padding: 12px; display: flex; border-top: 1px solid #eee; background: #fff; }
+        #user-input { flex-grow: 1; border: 1px solid #ddd; padding: 10px; border-radius: 20px; outline: none; }
+        .send-btn { background: var(--oxford-blue); color: white; border: none; width: 40px; height: 40px; margin-left: 8px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        /* --- FOOTER --- */
+        .footer { background: var(--oxford-blue); color: var(--white); padding: 30px 10px; border-top: 5px solid var(--primary); text-align: center; font-size: 0.9rem; }
+
+        /* --- MOBILE PHONE & TABLET OPTIMIZATIONS --- */
+        @media (max-width: 1024px) {
+            body, body.sidebar-collapsed { --sidebar-width: 0px; }
+            nav { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 4px solid var(--accent); padding: 15px; }
+            .nav-brand-area { display: flex; align-items: center; justify-content: center; gap: 15px; padding-bottom: 10px; margin-bottom: 10px; border-bottom: none; }
+            .nav-logo { height: 50px; }
+            .nav-brand-area h2 { margin-top: 0; }
+            .nav-links ul { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 5px; }
+            .nav-links a { padding: 8px 12px; font-size: 0.8rem; }
+            .sidebar-bottom-telemetry { display: none; }
+            
+            .top-telemetry-bar { position: relative; left: 0; width: 100%; height: auto; display: flex; flex-direction: column; padding: 15px; gap: 12px; box-shadow: none; }
+            .topbar-left-zone, .topbar-center-hub, .topbar-right-zone { width: 100%; justify-content: center; }
+            .sidebar-toggle-btn { display: none; }
+            .premium-news-console { flex-wrap: wrap; justify-content: center; }
+            .live-timetable-tracker-badge { max-width: 100%; width: 100%; justify-content: center; }
+
+            .main-workspace { margin-left: 0; margin-top: 0; width: 100%; }
+            .text-box h1 { font-size: 2rem; }
+            .text-box p { font-size: 0.95rem; }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links ul { gap: 3px; }
+            .nav-links a { padding: 6px 8px; font-size: 0.72rem; }
+            .text-box h1 { font-size: 1.6rem; }
+            section { padding: 40px 4%; }
+        }
+    </style>
+</head>
+<body>
+    
+
+    <nav id="sidebarNode">
+        <div class="nav-brand-area">
+            <a href="thirdYearHomePage.html"><img src="imageForProject/UCSTT Logo(true).png" alt="UCSTT Logo" class="nav-logo"></a>
+            <h2 style="color: var(--white); font-size: 0.95rem; font-weight: 800; margin-top: 10px; letter-spacing: 1px;">NextGen UCSTT</h2>
+        </div>
+        
+        <div class="nav-links">
+            <ul>
+                <li class="active"><a href="thirdYearHomePage.html"><i class="fas fa-home"></i> <span>HOME</span></a></li>
+                <li><a href="thirdYearAbout.html"><i class="fas fa-info-circle"></i> <span>ABOUT</span></a></li>
+                <li><a href="thirdYearGallery.html"><i class="fas fa-images"></i> <span>GALLERY</span></a></li>
+                <li><a href="thirdYearFeedBack.html"><i class="fas fa-comment-alt"></i> <span>FEEDBACK</span></a></li>
+                <li><a href="thirdYearContact.html"><i class="fas fa-envelope"></i> <span>CONTACT</span></a></li>
+                <li><a href="thirdYearNetwork.html"><i class="fas fa-network-wired"></i> <span>COMMUNICATION</span></a></li>
+                <li><a href="thirdYearLearnHtmlCssJs.html"><i class="fas fa-graduation-cap"></i> <span>LEARNING</span></a></li>
+            </ul>
+        </div>
+
+        <div class="sidebar-bottom-telemetry">
+            <h4>Alert Hub</h4>
+            <div class="sidebar-icon-grid">
+                <a href="#" class="sb-quick-btn" title="Announcements"><i class="fas fa-bullhorn"></i></a>
+                <a href="#" class="sb-quick-btn" title="Calendar"><i class="fas fa-calendar-alt"></i></a>
+                <a href="#" class="sb-quick-btn" title="Inbox"><i class="fas fa-inbox"></i></a>
+                <a href="#" class="sb-quick-btn" title="News"><i class="fas fa-newspaper"></i></a>
+                <a href="#" class="sb-quick-btn red-alert" title="Emergency"><i class="fas fa-exclamation-circle"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="top-telemetry-bar">
+        <div class="topbar-left-zone">
+            <button class="sidebar-toggle-btn" onclick="toggleSidebarSize()">
+                <i class="fas fa-bars" id="toggleIcon"></i>
+            </button>
+            <div class="live-clock-widget">
+                <i class="far fa-clock"></i>
+                <span id="live-time-display">00:00:00 AM</span>
+            </div>
+        </div>
+
+        <div class="topbar-center-hub">
+            <div class="live-timetable-tracker-badge">
+                <div class="status-pulse"></div>
+                <span id="class-status-text"><i class="fas fa-sync-alt fa-spin"></i> Syncing dynamic scheduler data logs...</span>
+            </div>
+        </div>
+
+        <div class="topbar-right-zone">
+            <div class="premium-news-console">
+                <a href="#internships" class="news-badge-item"><i class="fas fa-star"></i><span>Internships</span></a>
+                <a href="#horizons" class="news-badge-item"><i class="fas fa-globe"></i><span>Horizons</span></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-workspace">
+        
+        <section class="header">
+            <div class="text-box">
+                <h1>University of Computer Studies (Thaton)</h1>
+                <p>Welcome Back, Third Year Innovators!</p>
+                <a href="study.html" class="hero-btn">LET STUDY</a>
+            </div>
+        </section>
+
+        <section class="course">
+            <h1>Academic Excellence</h1>
+            <p>Providing the foundation for global technology leaders.</p>
+            <div class="row">
+                <div class="course-col">
+                    <h3>Skill Mastery</h3>
+                    <p>Develop critical expertise in programming, cybersecurity, AI, and professional teamwork.</p>
+                </div>
+                <div class="course-col">
+                    <h3>Degrees</h3>
+                    <p>Bachelor of Computer Science (B.C.Sc.) <br>Bachelor of Computer Technology (B.C.Tech.)</p>
+                </div>
+                <div class="course-col">
+                    <h3>Global Careers</h3>
+                    <p>Join the ranks of top Software Engineers, Data Scientists, and Cloud Architects worldwide.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="internship-section" id="internships">
+            <h1>University Internship Program</h1>
+            <p>Bridge the gap between theoretical computing science and industry-level execution.</p>
+            <div class="intern-grid">
+                <div class="intern-card">
+                    <div class="intern-icon"><i class="fas fa-code"></i></div>
+                    <h3>Software Engineering Track</h3>
+                    <p>Collaborate with technology firms on live production systems. Learn agile workflows, code deployments, and stack maintenance.</p>
+                    <a href="#" class="intern-download-btn"><i class="fas fa-file-download"></i> Apply Form</a>
+                </div>
+                <div class="intern-card">
+                    <div class="intern-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Network & Cybersecurity Track</h3>
+                    <p>Work directly within data server setups, routing environments, penetration testing modules, and security analytics protocols.</p>
+                    <a href="#" class="intern-download-btn"><i class="fas fa-file-download"></i> Apply Form</a>
+                </div>
+                <div class="intern-card">
+                    <div class="intern-icon"><i class="fas fa-brain"></i></div>
+                    <h3>AI & Data Analytics Track</h3>
+                    <p>Train deep learning architectures, perform complex data processing transformations, and deploy automated neural clusters.</p>
+                    <a href="#" class="intern-download-btn"><i class="fas fa-file-download"></i> Apply Form</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="horizons">
+            <h1>International Horizons</h1>
+            <p>မိမိကြည့်လိုသောနိုင်ငံပေါ်သို့ Mouse တင်၍ နှိပ်ပြီး IT ပရိုဂရမ်နှင့် အလုပ်အကိုင်များကို လေလာနိုင်ပါသည်။</p>
+            
+            <div class="marquee-wrapper-container">
+                <div class="train-marquee-track">
+                    
+                    <div class="campus-col" onclick="openCountryDetails('thailand')">
+                        <img src="imageForProject/T.jpg" alt="Thailand"><div class="layer"><h3>THAILAND</h3><span>Click to view ➔</span></div>
+                    </div>
+                    <div class="campus-col" onclick="openCountryDetails('singapore')">
+                        <img src="imageForProject/Sg.jpg" alt="Singapore"><div class="layer"><h3>SINGAPORE</h3><span>Click to view ➔</span></div>
+                    </div>
+                    <div class="campus-col" onclick="openCountryDetails('japan')">
+                        <img src="imageForProject/J.jpg" alt="Japan"><div class="layer"><h3>JAPAN</h3><span>Click to view ➔</span></div>
+                    </div>
+                    <div class="campus-col" onclick="openCountryDetails('malaysia')">
+                        <img src="imageForProject/M.jpg" alt="Malaysia"><div class="layer"><h3>MALAYSIA</h3><span>Click to view ➔</span></div>
+                    </div>
+                    <div class="campus-col" onclick="openCountryDetails('korea')">
+                        <img src="imageForProject/k.jpg" alt="South Korea"><div class="layer"><h3>SOUTH KOREA</h3><span>Click to view ➔</span></div>
+                    </div>
+                    <div class="campus-col" onclick="openCountryDetails('germany')">
+                        <img src="imageForProject/Ger_Img.jpg" alt="Germany"><div class="layer"><h3>GERMANY</h3><span>Click to view ➔</span></div>
+                    </div>
+                    <div class="campus-col" onclick="openCountryDetails('australia')">
+                        <img src="imageForProject/As.jpg" alt="Australia"><div class="layer"><h3>AUSTRALIA</h3><span>Click to view ➔</span></div>
+                    </div>
+                    <div class="campus-col" onclick="openCountryDetails('usa')">
+                        <img src="imageForProject/Us.jpg" alt="USA"><div class="layer"><h3>USA</h3><span>Click to view ➔</span></div>
+                    </div>
+                    <div class="campus-col" onclick="openCountryDetails('uk')">
+                        <img src="imageForProject/UK_Img.jpg" alt="United Kingdom"><div class="layer"><h3>UNITED KINGDOM</h3><span>Click to view ➔</span></div>
+                    </div>
+                    <div class="campus-col" onclick="openCountryDetails('canada')">
+                        <img src="imageForProject/Ca.jpg" alt="Canada"><div class="layer"><h3>CANADA</h3><span>Click to view ➔</span></div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <div class="horizon-modal" id="countryModal" onclick="closeCountryModal(event)">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalCountryTitle"><i class="fas fa-globe-asia"></i> Destination Details</h2>
+                    <span class="close-modal-btn" onclick="hideModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="info-block">
+                        <h4><i class="fas fa-graduation-cap"></i> Recommended IT Programs</h4>
+                        <p id="modalItProgram">Loading data...</p>
+                    </div>
+                    <div class="info-block">
+                        <h4><i class="fas fa-briefcase"></i> Job Opportunities</h4>
+                        <p id="modalJobOpp">Loading data...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="creators-section">
+            <h1>Meet Our Creative Team</h1>
+            <div class="creators-title-line"></div>
+            <p class="section-subtitle">The modular engineering student unit behind the development, logic schemas, and execution architectures of the UCSTT Portal.</p>
+            
+            <div class="team-compact-grid">
+                
+                <div class="team-glass-card">
+                    <div class="card-avatar-wrapper">
+                        <img src="photo_2025-11-08_11-17-04.jpg" alt="Thawdar Hein">
+                    </div>
+                    <div class="card-info-pane">
+                        <span class="card-id-badge">UCSTT(24-25)-081</span>
+                        <h3>Thawdar Hein</h3>
+                        <span class="role-text">Lead Full-Stack Architect</span>
+                        <div class="card-social-row">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-glass-card">
+                    <div class="card-avatar-wrapper">
+                        <img src="Pwint Yamone Zaw.jpg" alt="Pwint Yamone Zaw">
+                    </div>
+                    <div class="card-info-pane">
+                        <span class="card-id-badge">UCSTT(24-25)-054</span>
+                        <h3>Pwint Yamone Zaw</h3>
+                        <span class="role-text">UI/UX Creative Director</span>
+                        <div class="card-social-row">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-glass-card">
+                    <div class="card-avatar-wrapper">
+                        <img src="Ei_Ei_Phyo.jpg" alt="Ei Ei Phyo">
+                    </div>
+                    <div class="card-info-pane">
+                        <span class="card-id-badge">UCSTT(24-25)-083</span>
+                        <h3>Ei Ei Phyo</h3>
+                        <span class="role-text">Core System Developer</span>
+                        <div class="card-social-row">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-glass-card">
+                    <div class="card-avatar-wrapper">
+                        <img src="Shwe_Yi_Tun.jpg" alt="Shwe Yi Tun">
+                    </div>
+                    <div class="card-info-pane">
+                        <span class="card-id-badge">UCSTT(24-25)-080</span>
+                        <h3>Shwe Yi Tun</h3>
+                        <span class="role-text">Database Security Manager</span>
+                        <div class="card-social-row">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-glass-card">
+                    <div class="card-avatar-wrapper">
+                        <img src="Shun_lae_Thawdar.jpg" alt="Shoon Lae Thawdar">
+                    </div>
+                    <div class="card-info-pane">
+                        <span class="card-id-badge">UCSTT(24-25)-082</span>
+                        <h3>Shoon Lae Thawdar</h3>
+                        <span class="role-text">Frontend Integration Pro</span>
+                        <div class="card-social-row">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-glass-card">
+                    <div class="card-avatar-wrapper">
+                        <img src="Thet_Mon_Oo.jpg" alt="Thet Mon Oo">
+                    </div>
+                    <div class="card-info-pane">
+                        <span class="card-id-badge">UCSTT(24-25)-078</span>
+                        <h3>Thet Mon Oo</h3>
+                        <span class="role-text">Quality Assurance Engineer</span>
+                        <div class="card-social-row">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>&copy; 2026 University of Computer Studies (Thaton). All Rights Reserved.</p>
+            <p>Empowering the Next Generation of Global Innovators.</p>
+        </footer>
+    </div>
+
+    <div id="ai-chat-container">
+        <div id="chat-circle" onclick="toggleChat()"><i class="fas fa-robot fa-2x"></i></div>
+        <div id="chat-box">
+            <div class="chat-header">
+                <span><i class="fas fa-brain"></i> UCSTT AI Assistant</span>
+                <i class="fas fa-times" onclick="toggleChat()" style="cursor:pointer"></i>
+            </div>
+            <div id="chat-messages">
+                <div class="message bot-msg">Mingalaba! I am your updated AI Chatbox assistant. You can ask me anything about classes, developers, internships, horizons, or provide an active time target! 🌟🚀</div>
+                <div id="typing-indicator" style="display:none;" class="message bot-msg">Typing...</div>
+            </div>
+            
+            <div class="chat-input-area">
+                <input type="text" id="user-input" placeholder="Ask anything, e.g. 8:30 monday...">
+                <button class="send-btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        // --- 1. SIDEBAR MANAGEMENT CONTROLLER ---
+        function toggleSidebarSize() {
+            const body = document.body;
+            const icon = document.getElementById('toggleIcon');
+            body.classList.toggle('sidebar-collapsed');
+            icon.className = body.classList.contains('sidebar-collapsed') ? "fas fa-arrow-right" : "fas fa-bars";
+        }
+
+        // --- 3. REGIONAL HORIZON IT DATA REGISTRY ---
+        const horizonRegistry = {
+            thailand: {
+                title: "Kingdom of Thailand Tech Track",
+                program: "MSc in Computer Science & AI at Chulalongkorn University or Asian Institute of Technology (AIT). Special focus fields are IoT Engineering and Agricultural Tech Systems.",
+                job: "High demand for Full Stack Web Developers, Mobile App Architects (iOS/Android), and Localization Engineers in Bangkok tech hubs, Agoda corporate offices, and FinTech startups."
+            },
+            singapore: {
+                title: "Singapore Global Tech Hub",
+                program: "Advanced Cloud Architecting and Cybersecurity degrees at NUS / NTU Singapore.",
+                job: "Massive career pipelines for Cyber Incident Responders, FinTech Blockchain Developers, Data Engineers, and DevSecOps professionals at Google, Grab, and Shopee regional headquarters."
+            },
+            japan: {
+                title: "Japan Automation Horizons",
+                program: "Robotics Systems Design and Human-Computer Interaction (HCI) at the University of Tokyo / Tokyo Tech.",
+                job: "Active opportunities for Embedded Systems Programmers, AI Automation Engineers, and AI Researchers at Sony, Rakuten, and automation institutes."
+            },
+            malaysia: {
+                title: "Malaysia Cloud Ecosystems",
+                program: "Data Science, Business Analytics, and Network Infrastructure Modules at Asia Pacific University (APU) / Universiti Malaya.",
+                job: "Excellent roles for Cloud Support Specialists, Network Administrators, IT Security Analysts, and E-commerce Platform Managers in Kuala Lumpur and Penang tech clusters."
+            },
+            korea: {
+                title: "South Korea Advanced Hardware & AI",
+                program: "Smart Computing, Deep Learning Research, and Game Development architectures at KAIST and Seoul National University.",
+                job: "Strong pipelines for Mobile UI/UX Designers, Game Programmers, AI Training Specialists, and Semiconductor Software Architects at Samsung, Kakao, and Krafton."
+            },
+            germany: {
+                title: "Germany Industry 4.0 Ecosystem",
+                program: "Automotive Software Engineering, Advanced Mechatronics, and Distributed Systems at TU Munich / RWTH Aachen.",
+                job: "High placement rates for DevOps Engineers, Enterprise Java Developers, Automotive Systems Programmers, and SAP Consultants across Munich, Berlin, and Stuttgart."
+            },
+            australia: {
+                title: "Australia Tech Innovation Sector",
+                program: "Software Engineering Mastery, Cloud Engineering, and Cyber Defense Tracks at the University of Melbourne / UNSW Sydney.",
+                job: "Abundant job openings for Solutions Architects, Data Analysts, UI Developers, and IT Consultants in Sydney and Melbourne tech firms like Atlassian and Canva."
+            },
+            usa: {
+                title: "United States Silicon Valley Hub",
+                program: "Computer Science Research, Neural Networks, and Quantum Computing at Stanford, MIT, and UC Berkeley.",
+                job: "Unlimited opportunities for Machine Learning Engineers, Systems Software Developers, Tech Product Managers, and Cloud Infrastructure Architects in Silicon Valley, Seattle, and Austin."
+            },
+            uk: {
+                title: "United Kingdom Tech & FinTech Sector",
+                program: "Data Science, Financial Engineering, and Machine Learning Systems at Oxford, Cambridge, and Imperial College London.",
+                job: "Strong demand for Quantitative Developers, FinTech Software Engineers, AI Ethics Researchers, and Data Analysts in London's Silicon Roundabout and financial hubs."
+            },
+            canada: {
+                title: "Canada Tech Expansion Ecosystem",
+                program: "AI Analytics, Cyber Security Strategy, and Big Data Architecture programs at University of Toronto / UBC.",
+                job: "Growing pipelines for Site Reliability Engineers (SRE), Cloud Migration Specialists, Full Stack Developers, and Database Managers across Toronto, Vancouver, and Montreal hubs."
+            }
+        };
+
+        function openCountryDetails(countryKey) {
+            const countryData = horizonRegistry[countryKey];
+            if (!countryData) return;
+            
+            document.getElementById('modalCountryTitle').innerHTML = `<i class="fas fa-globe"></i> ${countryData.title}`;
+            document.getElementById('modalItProgram').innerText = countryData.program;
+            document.getElementById('modalJobOpp').innerText = countryData.job;
+            
+            const modal = document.getElementById('countryModal');
+            modal.classList.add('active');
+        }
+
+        function hideModal() { document.getElementById('countryModal').classList.remove('active'); }
+        function closeCountryModal(event) { if (event.target.id === "countryModal") hideModal(); }
+
+        // --- 4. CLASS DATABASE & ENGINE MAP (2CS SEMESTER IV TIMETABLE) ---
+        const subjectsDataMap = {
+            "E-201": "English Proficiency IV (Room: 209)",
+            "CST-2241": "Numerical Analysis (Maths)",
+            "CST-2212": "Artificial Intelligence (Room: 206)",
+            "CST-2213": "Operating Systems (Room: 206)",
+            "CST-2224": "Software Analysis & Design",
+            "CST-2235": "Data Comm & Networking (Room: 204)",
+            "CS-2256": "JavaScript(Room:205)"
+        };
+
+        const targetTimetable = {
+            1: [ // Monday
+                { start: "08:30", end: "09:30", key: "CST-2224", t: "Lecture" },
+                { start: "09:30", end: "10:30", key: "CST-2241", t: "Lecture" },
+                { start: "10:30", end: "11:30", key: "CST-2235", t: "Lecture" },
+                { start: "11:30", end: "12:30", key: "BREAK", t: "Lunch Break" },
+                { start: "12:30", end: "13:30", key: "CST-2213", t: "Lecture" },
+                { start: "13:30", end: "15:30", key: "E-201", t: "TD/Lab" }
+            ],
+            2: [ // Tuesday
+                { start: "08:30", end: "09:30", key: "CS-2256", t: "Lecture" },
+                { start: "09:30", end: "11:30", key: "CST-2212", t: "TD/Lab" },
+                { start: "11:30", end: "12:30", key: "BREAK", t: "Lunch Break" },
+                { start: "12:30", end: "14:30", key: "CST-2235", t: "TD/Lab" },
+                { start: "14:30", end: "15:30", key: "CST-2224", t: "TD" }
+            ],
+            3: [ // Wednesday
+                { start: "08:30", end: "09:30", key: "E-201", t: "Lecture" },
+                { start: "09:30", end: "11:30", key: "CS-2256", t: "Lab" },
+                { start: "11:30", end: "12:30", key: "BREAK", t: "Lunch Break" },
+                { start: "12:30", end: "13:30", key: "CST-2224", t: "Lecture" },
+                { start: "13:30", end: "14:30", key: "LIBRARY", t: "Library Session" },
+                { start: "14:30", end: "15:30", key: "STUDY", t: "Self-Study" }
+            ],
+            4: [ // Thursday
+                { start: "08:30", end: "09:30", key: "CST-2235", t: "Lecture" },
+                { start: "09:30", end: "11:30", key: "CST-2213", t: "TD/Lab" },
+                { start: "11:30", end: "12:30", key: "BREAK", t: "Lunch Break" },
+                { start: "12:30", end: "14:30", key: "CST-2241", t: "TD" },
+                { start: "14:30", end: "15:30", key: "CST-2212", t: "Lecture" }
+            ],
+            5: [ // Friday
+                { start: "08:30", end: "09:30", key: "CST-2241", t: "Lecture" },
+                { start: "09:30", end: "10:30", key: "CST-2224", t: "TD" },
+                { start: "10:30", end: "11:30", key: "E-201", t: "Lecture" },
+                { start: "11:30", end: "12:30", key: "BREAK", t: "Lunch Break" },
+                { start: "12:30", end: "13:30", key: "CST-2212", t: "Lecture" },
+                { start: "13:30", end: "14:30", key: "CS-2256", t: "Lecture" },
+                { start: "14:30", end: "15:30", key: "CST-2213", t: "Lecture" }
+            ]
+        };
+
+        function parseToMinutes(timeStr) {
+            const parts = timeStr.split(':');
+            return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        }
+
+        function calculateClassString(dayIndex, hours, minutes) {
+            if (dayIndex === 0 || dayIndex === 6) {
+                return "Weekend (No Active Classes)";
+            }
+            const scheduleList = targetTimetable[dayIndex];
+            if (!scheduleList) return "No data recorded.";
+
+            const totalMinutes = hours * 60 + minutes;
+
+            for (let i = 0; i < scheduleList.length; i++) {
+                const slot = scheduleList[i];
+                const startMin = parseToMinutes(slot.start);
+                const endMin = parseToMinutes(slot.end);
+
+                if (totalMinutes >= startMin && totalMinutes < endMin) {
+                    if (slot.key === "BREAK") return "🍱 Lunch Break Interval";
+                    if (slot.key === "LIBRARY" || slot.key === "STUDY") return `📖 ${slot.t}`;
+                    
+                    const fullTitle = subjectsDataMap[slot.key] || slot.key;
+                    return `Live Class: ${slot.key} - ${fullTitle} (${slot.t})`;
+                }
+            }
+            return "Campus Hours: Off-Hours / Self Study";
+        }
+
+        // --- 5. SYSTEM RUNTIME ENGINE & TOP BAR TELEMETRY ---
+        function executeScheduleTelemetry() {
+            const now = new Date();
+            let hours = now.getHours(), minutes = now.getMinutes(), seconds = now.getSeconds();
+            let ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            minutes = minutes < 10 ? '0'+minutes : minutes;
+            seconds = seconds < 10 ? '0'+seconds : seconds;
+            document.getElementById('live-time-display').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+
+            const bannerText = document.getElementById('class-status-text');
+            const pulse = document.querySelector('.status-pulse');
+            const currentDay = now.getDay();
+            
+            if (currentDay === 0 || currentDay === 6) {
+                bannerText.textContent = "💤 Weekend System Mode (No Classes Active)";
+                pulse.style.backgroundColor = "#64748b";
+            } else {
+                const realTimeStatus = calculateClassString(now.getDay(), now.getHours(), now.getMinutes());
+                bannerText.textContent = realTimeStatus;
+                
+                if (realTimeStatus.includes("Live Class")) {
+                    pulse.style.backgroundColor = "#10b981"; // Active Green
+                } else {
+                    pulse.style.backgroundColor = "#f59e0b"; // Warning Orange for break/off-hours
+                }
+            }
+        }
+        setInterval(executeScheduleTelemetry, 1000);
+        window.onload = executeScheduleTelemetry;
+
+        function toggleChat() {
+            const chatBox = document.getElementById('chat-box');
+            chatBox.style.display = (chatBox.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        // --- 6. CHATBOT INTERACTION ---
+        function sendMsg() {
+            const input = document.getElementById('user-input');
+            const container = document.getElementById('chat-messages');
+            const typing = document.getElementById('typing-indicator');
+            const userText = input.value.trim();
+            if (userText === "") return;
+
+            let userDiv = document.createElement('div');
+            userDiv.className = 'message user-msg';
+            userDiv.textContent = userText;
+            container.insertBefore(userDiv, typing);
+            input.value = "";
+            container.scrollTop = container.scrollHeight;
+            
+            typing.style.display = "block";
+
+            setTimeout(() => {
+                typing.style.display = "none";
+                let botDiv = document.createElement('div');
+                botDiv.className = 'message bot-msg';
+                
+                const query = userText.toLowerCase().trim();
+                let reply = "";
+
+                const regexPattern = /(\d{1,2})[:.](\d{2})/;
+                const checkTimeMatch = query.match(regexPattern);
+
+                if (query.includes("time") && (query.includes("now") || query.includes("current"))) {
+                    const dynamicNow = new Date();
+                    const wordsDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                    const liveReport = calculateClassString(dynamicNow.getDay(), dynamicNow.getHours(), dynamicNow.getMinutes());
+                    let minStr = dynamicNow.getMinutes() < 10 ? '0' + dynamicNow.getMinutes() : dynamicNow.getMinutes();
+                    reply = `Right now execution target is **${wordsDays[dynamicNow.getDay()]} ${dynamicNow.getHours()}:${minStr}**. ${liveReport}.`;
+                }
+                else if (checkTimeMatch) {
+                    const hourToken = parseInt(checkTimeMatch[1]);
+                    const minToken = parseInt(checkTimeMatch[2]);
+                    let targetedDay = new Date().getDay();
+                    if (targetedDay === 0 || targetedDay === 6) targetedDay = 1;
+                    const dayNamesArray = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                    let computedDayLabel = dayNamesArray[targetedDay];
+
+                    if (query.includes("mon")) { targetedDay = 1; computedDayLabel = "Monday"; }
+                    else if (query.includes("tue")) { targetedDay = 2; computedDayLabel = "Tuesday"; }
+                    else if (query.includes("wed")) { targetedDay = 3; computedDayLabel = "Wednesday"; }
+                    else if (query.includes("thu")) { targetedDay = 4; computedDayLabel = "Thursday"; }
+                    else if (query.includes("fri")) { targetedDay = 5; computedDayLabel = "Friday"; }
+
+                    const localizedLookup = calculateClassString(targetedDay, hourToken, minToken);
+                    reply = `Target trace match: On **${computedDayLabel}** at **${checkTimeMatch[0]}**, the status is: **${localizedLookup}**.`;
+                }
+                else if (query.includes("မင်္ဂလာပါ") || query.includes("hi") || query.includes("hello")) {
+                    reply = "Mingalaba! I am the UCSTT AI assistant. Ask me anything about current live classes, internship forms, or creative team members!";
+                } 
+                else if (query.includes("internship") || query.includes("apply")) {
+                    reply = "Navigate to the *'University Internship Program'* section below to download application forms.";
+                }
+                else if (query.includes("creator") || query.includes("developer") || query.includes("team")) {
+                    reply = "Our core platform was created by 6 students: Thawdar Hein, Pwint Yamone Zaw, Ei Ei Phyo, Shwe Yi Tun, Shoon Lae Thawdar, and Thet Mon Oo.";
+                }
+                else {
+                    reply = `Regarding *"${userText}"*, feel free to ask for specific entries like *'8:30 Monday'* to look up class schedules or check out our new *'Meet Our Team'* dashboard structure!`;
+                }
+
+                botDiv.innerHTML = reply.replace(/\n/g, "<br>").replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+                container.insertBefore(botDiv, typing);
+                container.scrollTop = container.scrollHeight;
+            }, 600);
+        }
+
+
+        document.getElementById("user-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                sendMsg();
+            }
+        });
+    </script>
+</body>
+</html>

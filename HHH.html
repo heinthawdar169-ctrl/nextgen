@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCSTT | University of Computer Studies (Thaton)</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* --- Root Brand Variables --- */
+        :root {
+            --primary: #A51C30;       /* Thaton Crimson */
+            --oxford-blue: #002147;   /* Oxford Blue */
+            --accent: #C49619;        /* Ivy League Gold */
+            --light-bg: #f8fafc;      /* Heritage Surface Off-White */
+            --white: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            --sidebar-width: 280px;
+            --topbar-height: 70px;
+        }
+        body.sidebar-collapsed {
+            --sidebar-width: 85px;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-color: var(--white);
+            color: var(--oxford-blue);
+            line-height: 1.7;
+            display: flex;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+        /* --- 1. MODERN LEFT-SIDE SIDEBAR NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--oxford-blue) 0%, #001229 100%);
+            border-right: 4px solid var(--accent);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            z-index: 1000;
+            box-shadow: 4px 0 25px rgba(0,0,0,0.15);
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+        body.sidebar-collapsed nav {
+            padding: 30px 10px;
+        }
+        .nav-brand-area {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        .nav-logo {
+            height: 85px;
+            width: auto;
+            transition: var(--transition);
+            filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.2));
+        }
+        .nav-logo:hover { transform: scale(1.05); }
+        body.sidebar-collapsed .nav-logo { height: 45px; }
+        body.sidebar-collapsed .nav-brand-area h2 { display: none !important; }
+        .nav-links { width: 100%; flex-grow: 1; }
+        .nav-links ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            padding: 12px 18px;
+            border-radius: 8px;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        body.sidebar-collapsed .nav-links a { justify-content: center; padding: 12px 0; }
+        body.sidebar-collapsed .nav-links span { display: none; }
+        .nav-links a i {
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+            color: var(--accent);
+            transition: var(--transition);
+        }
+        .nav-links a:hover, .nav-links li.active a {
+            color: var(--white);
+            background: rgba(255, 255, 255, 0.08);
+            border-left: 4px solid var(--primary);
+            padding-left: 22px;
+        }
+        body.sidebar-collapsed .nav-links a:hover,
+        body.sidebar-collapsed .nav-links li.active a {
+            padding-left: 0;
+            border-left: none;
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--accent);
+        }
+        /* --- SIDEBAR QUICK LINKS (MOVED FROM TOPBAR) --- */
+        .sidebar-bottom-telemetry {
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        body.sidebar-collapsed .sidebar-bottom-telemetry h4 { display: none; }
+        .sidebar-bottom-telemetry h4 {
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        .sidebar-icon-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: flex-start;
+        }
+        body.sidebar-collapsed .sidebar-icon-grid { justify-content: center; }
+
+        .sb-quick-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .sb-quick-btn:hover {
+            background: var(--accent);
+            color: var(--oxford-blue);
+            transform: translateY(-2px);
+        }
+        /* --- 2. CLEAN & STREAMLINED TOP TELEMETRY BAR --- */
+        .top-telemetry-bar {
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            height: var(--topbar-height);
+            background: var(--white);
+            border-bottom: 1px solid #e2e8f0;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            padding: 0 30px;
+            z-index: 999;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            transition: var(--transition);
+            gap: 20px;
+        }
+        .topbar-left-zone {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sidebar-toggle-btn {
+            background: var(--oxford-blue);
+            color: var(--white);
+            border: 1px solid var(--accent);
+            width: 34px;
+            height: 34px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+        .sidebar-toggle-btn:hover { background: var(--primary); }
+        /* --- MODERN NEWS ANNOUNCEMENT BAR --- */
+        .topbar-center-hub {
+            display: flex;
+            align-items: center;
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 6px 15px;
+            overflow: hidden;
+            border-left: 4px solid var(--primary);
+            position: relative;
+        }
+        .announcement-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            background: #f1f5f9;
+            z-index: 2;
+        }
+        .announcement-marquee {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+        .announcement-marquee-content {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marqueeScroll 25s linear infinite;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--oxford-blue);
+        }
+        .announcement-marquee-content span {
+            margin-right: 50px;
+        }
+        @keyframes marqueeScroll {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+        .topbar-center-hub:hover .announcement-marquee-content {
+            animation-play-state: paused;
+        }
+        .topbar-right-zone {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+        .premium-news-console {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .news-badge-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+            white-space: nowrap;
+            text-decoration: none;
+        }
+        .news-badge-item:hover, .news-badge-item.active-btn {
+            background: var(--oxford-blue);
+            border-color: var(--accent);
+            color: var(--white);
+        }
+        .news-badge-item i { color: var(--accent); }
+
+        /* --- FLASHING RED LIGHT INDICATOR --- */
+        .red-alert-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 5px;
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            animation: pulseLight 1.5s infinite;
+        }
+        @keyframes pulseLight {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+        }
+
+        /* --- 3. MAIN WORKSPACE VIEW CONTAINER --- */
+        .main-workspace {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--topbar-height);
+            width: calc(100% - var(--sidebar-width));
+            min-height: calc(100vh - var(--topbar-height));
+            transition: var(--transition);
+        }
+        /* --- HERO HEADER ADJUSTMENTS --- */
+        .header {
+            height: 65vh;
+            background: linear-gradient(rgba(0, 33, 71, 0.4), rgba(165, 28, 48, 0.2)),
+                        url('imageForProject/UcsttEntranceGate.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            padding: 0 20px;
+        }
+        .text-box h1 { font-size: 2.8rem; font-weight: 800; text-shadow: 2px 2px 10px rgba(0,0,0,0.6); }
+        .text-box p { font-size: 1.05rem; margin-bottom: 2rem; text-shadow: 1px 1px 5px rgba(0,0,0,0.6); }
+        .hero-btn {
+            padding: 0.8rem 2.5rem;
+            background: var(--primary);
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid var(--accent);
+            transition: var(--transition);
+        }
+        .hero-btn:hover { background: var(--white); color: var(--primary); }
+        section { padding: 60px 5%; text-align: center; }
+        .row { display: flex; justify-content: space-between; gap: 1.5rem; margin-top: 40px; flex-wrap: wrap; }
+        .course-col {
+            flex: 1;
+            min-width: 250px;
+            background: var(--light-bg);
+            padding: 30px 20px;
+            border-top: 5px solid var(--oxford-blue);
+            transition: var(--transition);
+        }
+        .course-col:hover { border-top-color: var(--primary); transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.05); }
+        .course-col h3 { margin-bottom: 15px; color: var(--primary); }
+        .internship-section { background-color: var(--light-bg); }
+        .intern-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        .intern-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 30px 25px;
+            text-align: left;
+            border-left: 5px solid var(--primary);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+            transition: var(--transition);
+        }
+        .intern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            border-left-color: var(--accent);
+        }
+        .intern-icon { font-size: 2rem; color: var(--oxford-blue); margin-bottom: 15px; }
+        .intern-card h3 { font-size: 1.2rem; color: var(--oxford-blue); margin-bottom: 12px; }
+        .intern-card p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px; }
+        .intern-download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--oxford-blue);
+            color: var(--white);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: var(--transition);
+        }
+        .intern-download-btn:hover { background: var(--primary); }
+        /* --- INFINITE TRAIN TRACK MULTI-CAROUSEL --- */
+        .marquee-wrapper-container {
+            width: 100%;
+            overflow: hidden;
+            padding: 30px 0;
+            position: relative;
+            background: #fafafa;
+            border-top: 1px solid #f1f5f9;
+            border-bottom: 1px solid #f1f5f9;
+            margin-top: 30px;
+        }
+
+        .train-marquee-track {
+            display: flex;
+            width: max-content;
+            gap: 25px;
+            animation: trainMoveLoop 35s linear infinite;
+        }
+
+        .marquee-wrapper-container:hover .train-marquee-track {
+            animation-play-state: paused;
+        }
+
+        @keyframes trainMoveLoop {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-50% - 12.5px)); }
+        }
+        .campus-col {
+            flex-shrink: 0;
+            width: 260px;
+            position: relative;
+            overflow: hidden;
+            border: 6px solid var(--white);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            height: 260px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .campus-col img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        .campus-col:hover img {
+            transform: scale(1.1);
+        }
+        .layer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(transparent, rgba(0, 33, 71, 0.95));
+            color: var(--white);
+            padding: 25px 15px 15px 15px;
+            transition: var(--transition);
+            text-align: left;
+        }
+        .campus-col:hover .layer {
+            background: linear-gradient(transparent, rgba(165, 28, 48, 0.98));
+        }
+        .layer h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; color: var(--white); }
+        .layer span { font-size: 0.75rem; color: var(--accent); display: block; margin-top: 2px; font-weight: 500; }
+        /* --- DYNAMIC MODAL BOXES --- */
+        .horizon-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 18, 41, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 5000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .horizon-modal.active { display: flex; opacity: 1; }
+        .modal-content {
+            background: var(--white);
+            width: 100%;
+            max-width: 650px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            border: 3px solid var(--accent);
+            transform: scale(0.85);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .horizon-modal.active .modal-content { transform: scale(1); }
+        .modal-header { background: var(--oxford-blue); color: var(--white); padding: 20px 25px; position: relative; }
+        .modal-header h2 { font-size: 1.5rem; color: var(--white); display: flex; align-items: center; gap: 10px; }
+        .close-modal-btn { position: absolute; top: 20px; right: 25px; color: rgba(255,255,255,0.7); font-size: 1.5rem; cursor: pointer; transition: var(--transition); }
+        .close-modal-btn:hover { color: var(--accent); }
+        .modal-body { padding: 30px; text-align: left; }
+        .info-block { margin-bottom: 25px; }
+        .info-block h4 { color: var(--primary); font-size: 1rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #f1f5f9; padding-bottom: 4px; }
+        .info-block p { font-size: 0.9rem; color: var(--text-main); }
+        
+        /* --- 4. COMPACT & HIGHLY CREATIVE TEAM DASHBOARD GRID --- */
+        .creators-section {
+            padding: 80px 6%;
+            background: #fafcff;
+            text-align: center;
+        }
+        .creators-section h1 { font-size: 2.2rem; font-weight: 800; color: var(--oxford-blue); }
+        .creators-title-line { width: 70px; height: 5px; background: linear-gradient(90deg, var(--primary), var(--accent)); margin: 12px auto 20px auto; border-radius: 10px; }
+        .section-subtitle { font-size: 0.95rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 40px auto; }
+
+        .team-compact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .team-glass-card {
+            background: var(--white);
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            transition: var(--transition);
+        }
+        .team-glass-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(165, 28, 48, 0.3);
+            box-shadow: 0 12px 25px rgba(165, 28, 48, 0.08);
+        }
+        .team-glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--oxford-blue);
+            transition: var(--transition);
+        }
+        .team-glass-card:hover::before {
+            background: var(--primary);
+        }
+        .card-avatar-wrapper {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: var(--light-bg);
+            border: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: var(--oxford-blue);
+            flex-shrink: 0;
+        }
+        .team-glass-card:hover .card-avatar-wrapper {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+        .card-info-pane {
+            text-align: left;
+        }
+        .card-info-pane h3 {
+            font-size: 1.05rem;
+            color: var(--oxford-blue);
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        .card-info-pane p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* --- 5. CHAT ENGINE PLATFORM STYLE --- */
+        .ai-floating-trigger {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--oxford-blue);
+            color: var(--white);
+            border: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            cursor: pointer;
+            z-index: 4000;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            transition: var(--transition);
+        }
+        .ai-floating-trigger:hover { background: var(--primary); transform: scale(1.05) rotate(10deg); }
+        .chat-container-box {
+            position: fixed;
+            bottom: 105px;
+            right: 30px;
+            width: 360px;
+            height: 480px;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            border: 3px solid var(--oxford-blue);
+            display: none;
+            flex-direction: column;
+            z-index: 4000;
+            overflow: hidden;
+        }
+        .chat-header-pane {
+            background: var(--oxford-blue);
+            color: var(--white);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .chat-header-pane h3 { font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .chat-body-stream {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .chat-msg-row { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 0.82rem; font-weight: 500; }
+        .system-msg { background: var(--white); color: var(--text-main); border: 1px solid #e2e8f0; align-self: flex-start; border-radius-top-left: 0; }
+        .user-msg { background: var(--primary); color: var(--white); align-self: flex-end; border-radius-top-right: 0; }
+        .chat-input-bar {
+            padding: 15px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 10px;
+            background: var(--white);
+        }
+        .chat-input-bar input {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            outline: none;
+            font-size: 0.85rem;
+        }
+        .chat-send-btn {
+            background: var(--oxford-blue);
+            color: var(--white);
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        .chat-send-btn:hover { background: var(--primary); }
+        footer { background: var(--oxford-blue); color: var(--white); text-align: center; padding: 25px; border-top: 5px solid var(--primary); font-size: 0.85rem; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+    <nav id="sidebar">
+        <div class="nav-brand-area">
+            <img src="imageForProject/ucstt logo.png" alt="UCSTT Logo" class="nav-logo">
+            <h2 style="color: var(--white); font-size: 1.1rem; margin-top: 10px; font-weight: 700; letter-spacing: 0.5px;">UCSTT CORE</h2>
+        </div>
+        <div class="nav-links">
+            <ul>
+                <li class="active"><a href="#"><i class="fa-solid fa-gauge-high"></i> <span>Dashboard Hub</span></a></li>
+                <li><a href="#" onclick="showTimetableModal()"><i class="fa-solid fa-calendar-days"></i> <span>Class Timetables</span></a></li>
+                <li><a href="#courses-sec"><i class="fa-solid fa-graduation-cap"></i> <span>Academic Programs</span></a></li>
+                <li><a href="#intern-sec"><i class="fa-solid fa-building-columns"></i> <span>Internship Center</span></a></li>
+                <li><a href="#creators-sec"><i class="fa-solid fa-laptop-code"></i> <span>Platform Team</span></a></li>
+            </ul>
+        </div>
+        <div class="sidebar-bottom-telemetry">
+            <h4>Quick Connections</h4>
+            <div class="sidebar-icon-grid">
+                <a href="https://www.facebook.com/profile.php?id=100063941424911&mibextid=ZbWKwL" target="_blank" class="sb-quick-btn"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="mailto:ucsthaton@gmail.com" class="sb-quick-btn"><i class="fa-solid fa-envelope"></i></a>
+                <a href="tel:0943174246" class="sb-quick-btn"><i class="fa-solid fa-phone"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-workspace">
+        
+        <div class="top-telemetry-bar">
+            <div class="topbar-left-zone">
+                <button class="sidebar-toggle-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+            </div>
+            
+            <div class="topbar-center-hub">
+                <div class="announcement-label"><i class="fa-solid fa-bullhorn"></i> Live Ticker:</div>
+                <div class="announcement-marquee">
+                    <div class="announcement-marquee-content">
+                        <span>Welcome to the University of Computer Studies (Thaton) Official Portal!</span>
+                        <span>Exciting News: Dynamic Timetables feature is live now. Check your batch schedule.</span>
+                        <span>Notice: Internship application submission deadline has been updated for this semester.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="topbar-right-zone">
+                <div class="premium-news-console">
+                    <a href="#" class="news-badge-item" onclick="showTimetableModal()"><i class="fa-solid fa-clock"></i> Live Schedules</a>
+                    <a href="#" class="news-badge-item" onclick="showAlertContent()">
+                        <i class="fa-solid fa-circle-exclamation"></i> Alert Hub <span class="red-alert-dot" id="hub-light"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="header">
+            <div class="text-box">
+                <h1>University of Computer Studies (Thaton)</h1>
+                <p>Developing tech leaders, builders, and elite developers of tomorrow through systemic tech education.</p>
+                <a href="#courses-sec" class="hero-btn">Explore Degree Paths</a>
+            </div>
+        </div>
+
+        <section id="courses-sec">
+            <h1 style="font-size: 2.2rem; font-weight: 800;">Academic Programs</h1>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Our specialized curriculum matrix designed for competitive engineering careers.</p>
+            <div class="row">
+                <div class="course-col">
+                    <h3>Computer Science (B.C.Sc.)</h3>
+                    <p>Focuses on software engineering paradigms, predictive AI models, modern database frameworks, advanced systems architecture, and distributed processing environments.</p>
+                </div>
+                <div class="course-col">
+                    <h3>Computer Technology (B.C.Tech.)</h3>
+                    <p>Emphasizes structural hardware design blueprints, advanced microprocessor configuration, computer networking architecture, system administration, and IoT automation engineering.</p>
+                </div>
+            </div>
+        </section>
+
+        <section style="padding: 40px 0 60px 0;">
+            <h1 style="font-size: 2.2rem; font-weight: 800; padding: 0 5%;">Our Campus Gallery</h1>
+            <div class="marquee-wrapper-container">
+                <div class="train-marquee-track">
+                    <div class="campus-col"><img src="imageForProject/UcsttEntranceGate.jpg"><div class="layer"><h3>Main Campus Gate</h3><span>UCSTT Entrance Gateway</span></div></div>
+                    <div class="campus-col"><img src="imageForProject/UcsttMainBuilding.jpg"><div class="layer"><h3>Academic Arena</h3><span>Central Learning Facility</span></div></div>
+                    <div class="campus-col"><img src="imageForProject/UcsttMainBuilding2.jpg"><div class="layer"><h3>Administrative Center</h3><span>Office & Convocation Hall</span></div></div>
+                    <div class="campus-col"><img src="imageForProject/UcsttConvocationHall.jpg"><div class="layer"><h3>Convocation Center</h3><span>Graduation & Event Auditorium</span></div></div>
+                    <div class="campus-col"><img src="imageForProject/UcsttEntranceGate.jpg"><div class="layer"><h3>Main Campus Gate</h3><span>UCSTT Entrance Gateway</span></div></div>
+                    <div class="campus-col"><img src="imageForProject/UcsttMainBuilding.jpg"><div class="layer"><h3>Academic Arena</h3><span>Central Learning Facility</span></div></div>
+                    <div class="campus-col"><img src="imageForProject/UcsttMainBuilding2.jpg"><div class="layer"><h3>Administrative Center</h3><span>Office & Convocation Hall</span></div></div>
+                    <div class="campus-col"><img src="imageForProject/UcsttConvocationHall.jpg"><div class="layer"><h3>Convocation Center</h3><span>Graduation & Event Auditorium</span></div></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="intern-sec" class="internship-section">
+            <h1 style="font-size: 2.2rem; font-weight: 800;">University Internship Program</h1>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Empowering computer studies scholars with strategic industry internship placements.</p>
+            
+            <div class="intern-grid">
+                <div class="intern-card">
+                    <div class="intern-icon"><i class="fa-solid fa-file-signature"></i></div>
+                    <h3>Application Form</h3>
+                    <p>Primary application document required for internal review and placement tracking within partnered technology firms.</p>
+                    <a href="documentForProject/internship application form.pdf" download class="intern-download-btn"><i class="fa-solid fa-download"></i> Download PDF</a>
+                </div>
+                <div class="intern-card">
+                    <div class="intern-icon"><i class="fa-solid fa-award"></i></div>
+                    <h3>Performance Certificate</h3>
+                    <p>Validation and reference framework to be completed by enterprise managers upon successful project completion.</p>
+                    <a href="documentForProject/internship certificate.pdf" download class="intern-download-btn"><i class="fa-solid fa-download"></i> Download PDF</a>
+                </div>
+                <div class="intern-card">
+                    <div class="intern-icon"><i class="fa-solid fa-user-tie"></i></div>
+                    <h3>Recommendation Letter</h3>
+                    <p>Standardized academic endorsement format required by international tech organizations and local companies alike.</p>
+                    <a href="documentForProject/Recommendation Letter for Internship.pdf" download class="intern-download-btn"><i class="fa-solid fa-download"></i> Download PDF</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="creators-sec" class="creators-section">
+            <h1>Creative Platform Developers</h1>
+            <div class="creators-title-line"></div>
+            <p class="section-subtitle">The structural system developers, engineers, and interface designers behind the UCSTT platform ecosystem.</p>
+            
+            <div class="team-compact-grid">
+                <div class="team-glass-card"><div class="card-avatar-wrapper"><i class="fa-solid fa-user-ninja"></i></div><div class="card-info-pane"><h3>Thawdar Hein</h3><p>Lead Architecture Engineer</p></div></div>
+                <div class="team-glass-card"><div class="card-avatar-wrapper"><i class="fa-solid fa-user-astronaut"></i></div><div class="card-info-pane"><h3>Pwint Yamone Zaw</h3><p>Database & Schema Designer</p></div></div>
+                <div class="team-glass-card"><div class="card-avatar-wrapper"><i class="fa-solid fa-user-secret"></i></div><div class="card-info-pane"><h3>Ei Ei Phyo</h3><p>Security & Encryption Systems</p></div></div>
+                <div class="team-glass-card"><div class="card-avatar-wrapper"><i class="fa-solid fa-user-graduate"></i></div><div class="card-info-pane"><h3>Shwe Yi Tun</h3><p>UI Component Specialist</p></div></div>
+                <div class="team-glass-card"><div class="card-avatar-wrapper"><i class="fa-solid fa-user-tie"></i></div><div class="card-info-pane"><h3>Shoon Lae Thawdar</h3><p>Telemetry Analytics Engineer</p></div></div>
+                <div class="team-glass-card"><div class="card-avatar-wrapper"><i class="fa-solid fa-user-md"></i></div><div class="card-info-pane"><h3>Thet Mon Oo</h3><p>Quality Assurance Controller</p></div></div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 UCSTT | University of Computer Studies (Thaton). All Rights Reserved Engineering Systems Platform.</p>
+        </footer>
+    </div>
+
+    <div class="horizon-modal" id="timetableModal" onclick="closeTimetableModal(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-calendar-week" style="color: var(--accent);"></i> Dynamic Roster Explorer</h2>
+                <span class="close-modal-btn" onclick="hideTimetableModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                
+                <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>08:30 - 09:30</th>
+                            <th>09:30 - 10:30</th>
+                            <th>10:30 - 11:30</th>
+                            <th>11:30 - 12:30</th>
+                            <th>12:30 - 01:30</th>
+                            <th>01:30 - 02:30</th>
+                            <th>02:30 - 03:30</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Monday</strong></td>
+                            <td><span class="subject-slot">Java Programming</span><span class="room-slot">Lab 3</span></td>
+                            <td><span class="subject-slot">English</span><span class="room-slot">Room 202</span></td>
+                            <td><span class="subject-slot">DBMS Overview</span><span class="room-slot">Room 104</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tuesday</strong></td>
+                            <td><span class="subject-slot">Java Programming</span><span class="room-slot">Lab 3</span></td>
+                            <td><span class="subject-slot">English</span><span class="room-slot">Room 202</span></td>
+                            <td><span class="subject-slot">DBMS Overview</span><span class="room-slot">Room 104</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Wednesday</strong></td>
+                            <td><span class="subject-slot">Data Structures</span><span class="room-slot">Room 201</span></td>
+                            <td><span class="subject-slot">Tutorial</span><span class="room-slot">Room 201</span></td>
+                            <td><span class="subject-slot">Java Systems Lab</span><span class="room-slot">Lab 3</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Friday</strong></td>
+                            <td><span class="subject-slot">Mathematics II</span><span class="room-slot">Room 102</span></td>
+                            <td><span class="subject-slot">Seminar</span><span class="room-slot">Main Hall</span></td>
+                            <td><span class="subject-slot">Database Practicum</span><span class="room-slot">Lab 1</span></td>
+                        </tr>
+                    </tbody>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="ai-floating-trigger" onclick="toggleChat()"><i class="fa-solid fa-robot"></i></div>
+    
+    <div class="chat-container-box" id="chat-box">
+        <div class="chat-header-pane">
+            <h3><i class="fa-solid fa-microchip"></i> UCSTT AI Console</h3>
+            <span style="cursor: pointer; font-weight: 700;" onclick="toggleChat()">&times;</span>
+        </div>
+        <div class="chat-body-stream" id="chat-stream">
+            <div class="chat-msg-row system-msg">Greetings from UCSTT Intelligence Engine. Ask me about dynamic schedules, academic majors, internship program documents, or developers!</div>
+        </div>
+        <div class="chat-input-bar">
+            <input type="text" id="user-input" placeholder="Type tech query..." onkeydown="if(event.key === 'Enter') sendMsg()">
+            <button class="chat-send-btn" onclick="sendMsg()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script>
+        /* --- 1. VIEW VIEWSTATE CONTROL MANIPULATION --- */
+        function toggleSidebar() {
+            document.body.classList.toggle('sidebar-collapsed');
+        }
+
+        /* --- 2. MODAL DIALOGUE CONTROLLERS --- */
+        function showTimetableModal() {
+            document.getElementById('timetableModal').classList.add('active');
+        }
+        function hideTimetableModal() {
+            document.getElementById('timetableModal').classList.remove('active');
+        }
+        function closeTimetableModal(e) {
+            if(e.target.id === 'timetableModal') hideTimetableModal();
+        }
+
+        /* --- ALERT HUB CLICK ACTION CONTROLLER --- */
+        function showAlertContent() {
+            alert("ALERT HUB INFO:\n\n1. Exam timetable rosters updated successfully.\n2. Submission periods for internship files are closing shortly.");
+            
+            // Turns off the red glowing dot indicator when clicked
+            const lightIndicator = document.getElementById('hub-light');
+            if (lightIndicator) {
+                lightIndicator.style.display = 'none';
+            }
+        }
+
+        /* --- AI CHATBOX MINI ENGINE --- */
+        function toggleChat() {
+            const chatBox = document.getElementById('chat-box');
+            chatBox.style.display = (chatBox.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function sendMsg() {
+            const input = document.getElementById('user-input');
+            const txt = input.value.trim();
+            if(!txt) return;
+            
+            appendMsg(txt, 'user-msg');
+            input.value = '';
+            
+            setTimeout(() => {
+                let reply = "I process structured web engineering protocols. Please clarify your system request about UCSTT.";
+                const query = txt.toLowerCase();
+                
+                if (query.includes("hello")) {
+                    reply = "Mingalaba! I am the UCSTT AI assistant. Ask me anything about current live classes, internship forms, or creative team members!";
+                } 
+                else if (query.includes("internship") || query.includes("apply")) {
+                    reply = "Navigate to the *'University Internship Program'* section below to download application forms.";
+                }
+                else if (query.includes("creator") || query.includes("developer") || query.includes("team")) {
+                    reply = "Our core platform was created by 6 students: Thawdar Hein, Pwint Yamone Zaw, Ei Ei Phyo, Shwe Yi Tun, Shoon Lae Thawdar, and Thet Mon Oo.";
+                }
+                
+                appendMsg(reply, 'system-msg');
+            }, 550);
+        }
+
+        function appendMsg(msg, className) {
+            const stream = document.getElementById('chat-stream');
+            const div = document.createElement('div');
+            div.className = `chat-msg-row ${className}`;
+            div.innerText = msg;
+            stream.appendChild(div);
+            stream.scrollTop = stream.scrollHeight;
+        }
+    </script>
+</body>
+</html>

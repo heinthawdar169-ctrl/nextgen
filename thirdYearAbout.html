@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | UCSTT Portal</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* --- Root Brand Variables (Exactly matching homePage.html) --- */
+        :root {
+            --primary: #A51C30;       /* Thaton Crimson */
+            --oxford-blue: #002147;   /* Oxford Blue */
+            --accent: #C49619;        /* Ivy League Gold */
+            --light-bg: #f8fafc;      /* Heritage Surface Off-White */
+            --white: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            --sidebar-width: 280px;
+            --topbar-height: 70px;
+        }
+
+        body.sidebar-collapsed {
+            --sidebar-width: 85px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--oxford-blue);
+            line-height: 1.7;
+            display: flex;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        /* --- 1. MODERN LEFT-SIDE SIDEBAR NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--oxford-blue) 0%, #001229 100%);
+            border-right: 4px solid var(--accent);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            z-index: 1000;
+            box-shadow: 4px 0 25px rgba(0,0,0,0.15);
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        body.sidebar-collapsed nav {
+            padding: 30px 10px;
+        }
+
+        .nav-brand-area {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .nav-logo {
+            height: 85px;
+            width: auto;
+            transition: var(--transition);
+            filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.2));
+        }
+        .nav-logo:hover { transform: scale(1.05); }
+
+        body.sidebar-collapsed .nav-logo { height: 45px; }
+        body.sidebar-collapsed .nav-brand-area h2 { display: none !important; }
+
+        .nav-links { width: 100%; flex-grow: 1; }
+        .nav-links ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            padding: 12px 18px;
+            border-radius: 8px;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        body.sidebar-collapsed .nav-links a { justify-content: center; padding: 12px 0; }
+        body.sidebar-collapsed .nav-links span { display: none; }
+
+        .nav-links a i {
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+            color: var(--accent);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover, .nav-links li.active a {
+            color: var(--white);
+            background: rgba(255, 255, 255, 0.08);
+            border-left: 4px solid var(--primary);
+            padding-left: 22px;
+        }
+
+        body.sidebar-collapsed .nav-links a:hover, 
+        body.sidebar-collapsed .nav-links li.active a {
+            padding-left: 0;
+            border-left: none;
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--accent);
+        }
+
+        /* SIDEBAR QUICK LINKS */
+        .sidebar-bottom-telemetry {
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        body.sidebar-collapsed .sidebar-bottom-telemetry h4 { display: none; }
+        .sidebar-bottom-telemetry h4 {
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        .sidebar-icon-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: flex-start;
+        }
+        body.sidebar-collapsed .sidebar-icon-grid { justify-content: center; }
+        
+        .sb-quick-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .sb-quick-btn:hover {
+            background: var(--accent);
+            color: var(--oxford-blue);
+            transform: translateY(-2px);
+        }
+        .sb-quick-btn.red-alert:hover { background: #ef4444; color: white; }
+
+        /* --- 2. CLEAN & STREAMLINED TOP TELEMETRY BAR --- */
+        .top-telemetry-bar {
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            height: var(--topbar-height);
+            background: var(--white);
+            border-bottom: 1px solid #e2e8f0;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            align-items: center;
+            padding: 0 30px;
+            z-index: 999;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            transition: var(--transition);
+        }
+
+        .topbar-left-zone { display: flex; align-items: center; gap: 12px; }
+
+        .sidebar-toggle-btn {
+            background: var(--oxford-blue);
+            color: var(--white);
+            border: 1px solid var(--accent);
+            width: 34px;
+            height: 34px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+        .sidebar-toggle-btn:hover { background: var(--primary); }
+
+        .live-clock-widget {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--oxford-blue);
+        }
+        .live-clock-widget i { color: var(--primary); }
+
+        /* TIMETABLE TRACKER CENTER HUD */
+        .topbar-center-hub { display: flex; justify-content: center; align-items: center; width: 100%; }
+
+        .live-timetable-tracker-badge {
+            background: linear-gradient(90deg, rgba(165,28,48,0.08) 0%, rgba(0,33,71,0.05) 100%);
+            border: 1px dashed var(--primary);
+            padding: 8px 24px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 90%;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+
+        .status-pulse {
+            width: 10px;
+            height: 10px;
+            background-color: #10b981;
+            border-radius: 50%;
+            animation: pulseWave 1.8s infinite;
+            flex-shrink: 0;
+        }
+        @keyframes pulseWave {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.6; }
+        }
+
+        #class-status-text {
+            font-size: 0.88rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            color: var(--oxford-blue);
+        }
+
+        .topbar-right-zone { display: flex; align-items: center; justify-content: flex-end; gap: 15px; }
+        .premium-news-console { display: flex; align-items: center; gap: 8px; }
+        
+        .news-badge-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+            white-space: nowrap;
+            text-decoration: none;
+        }
+        .news-badge-item:hover { border-color: var(--accent); color: var(--primary); }
+        .news-badge-item i { color: var(--accent); }
+
+        /* --- 3. MAIN WORKSPACE CONTENT VIEW --- */
+        .main-workspace {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--topbar-height);
+            width: calc(100% - var(--sidebar-width));
+            min-height: calc(100vh - var(--topbar-height));
+            transition: var(--transition);
+            background-color: var(--light-bg);
+            padding: 40px;
+        }
+
+        /* About Us Layout Structure */
+        .about-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        /* Layout Grid: Intro Text + Photo Container */
+        .overview-card {
+            background: var(--white);
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+
+        .overview-text h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--oxford-blue);
+            margin-bottom: 20px;
+            border-left: 6px solid var(--primary);
+            padding-left: 15px;
+        }
+
+        .overview-text p {
+            color: var(--text-main);
+            font-size: 0.98rem;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        /* Beautiful Dynamic Photo Frame */
+        .photo-frame {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 4px solid var(--accent);
+            box-shadow: 0 12px 30px rgba(0, 33, 71, 0.15);
+            height: 320px;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .photo-frame:hover img {
+            transform: scale(1.06);
+        }
+
+        /* --- ANIMATED COUNTER DECK --- */
+        .counter-deck {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .counter-card {
+            background: var(--white);
+            border: 1px solid #e2e8f0;
+            border-bottom: 4px solid var(--primary);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .counter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-bottom-color: var(--accent);
+        }
+
+        .counter-icon {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .counter-number {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--oxford-blue);
+        }
+
+        .counter-card p {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        /* --- TABBED SYSTEM FOR VISION & MISSION --- */
+        .tab-universe {
+            background: var(--white);
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .tab-bar {
+            display: flex;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .tab-btn.active {
+            background: var(--white);
+            color: var(--primary);
+            box-shadow: inset 0 3px 0 var(--primary);
+        }
+
+        .tab-pane {
+            padding: 40px;
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        .tab-pane h3 {
+            font-size: 1.3rem;
+            color: var(--oxford-blue);
+            margin-bottom: 15px;
+        }
+
+        .tab-pane ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tab-pane ul li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.95rem;
+        }
+
+        .tab-pane ul li i {
+            color: var(--accent);
+            margin-top: 5px;
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            background: var(--oxford-blue);
+            color: var(--white);
+            padding: 25px 10px;
+            border-top: 5px solid var(--primary);
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 40px;
+        }
+
+        /* --- RESPONSIVE BREAKPOINTS (Matching homePage.html layout) --- */
+        @media (max-width: 1024px) {
+            body, body.sidebar-collapsed { --sidebar-width: 0px; }
+            nav { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 4px solid var(--accent); padding: 15px; }
+            .nav-brand-area { display: flex; align-items: center; justify-content: center; gap: 15px; padding-bottom: 10px; margin-bottom: 10px; border-bottom: none; }
+            .nav-logo { height: 50px; }
+            .nav-links ul { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 5px; }
+            .nav-links a { padding: 8px 12px; font-size: 0.8rem; }
+            .sidebar-bottom-telemetry { display: none; }
+            .top-telemetry-bar { position: relative; left: 0; width: 100%; height: auto; display: flex; flex-direction: column; padding: 15px; gap: 12px; box-shadow: none; }
+            .sidebar-toggle-btn { display: none; }
+            .topbar-right-zone, .topbar-center-hub { width: 100%; justify-content: center; }
+            .main-workspace { margin-left: 0; margin-top: 0; width: 100%; padding: 20px; }
+            .overview-card { grid-template-columns: 1fr; padding: 25px; }
+            .photo-frame { height: 240px; }
+            .counter-deck { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="sidebarNode">
+        <div class="nav-brand-area">
+            <a href="index.html"><img src="imageForProject/UCSTT Logo(true).png" alt="UCSTT Logo" class="nav-logo"></a>
+            <h2 style="color: var(--white); font-size: 0.95rem; font-weight: 800; margin-top: 10px; letter-spacing: 1px;">NextGen UCSTT</h2>
+        </div>
+        <div class="nav-links">
+            <ul>
+                <li><a href="thirdYearHomePage.html"><i class="fas fa-home"></i> <span>HOME</span></a></li>
+                <li class="active"><a href="thirdYearAbout.html"><i class="fas fa-info-circle"></i> <span>ABOUT</span></a></li>
+                <li><a href="thirdYearGallery.html"><i class="fas fa-images"></i> <span>GALLERY</span></a></li>
+                <li><a href="thirdYearFeedback.html"><i class="fas fa-comment-alt"></i> <span>FEEDBACK</span></a></li>
+                <li><a href="thirdYearContact.html"><i class="fas fa-envelope"></i> <span>CONTACT</span></a></li>
+                <li><a href="thirdYearNetwork.html"><i class="fas fa-network-wired"></i> <span>COMMUNICATION</span></a></li>
+                <li><a href="thirdYearLearnHtmlCssJs.html"><i class="fas fa-graduation-cap"></i> <span>LEARNING</span></a></li>
+            </ul>
+        </div>
+        <div class="sidebar-bottom-telemetry">
+            <h4>Alert Hub</h4>
+            <div class="sidebar-icon-grid">
+                <a href="#" class="sb-quick-btn" title="Announcements"><i class="fas fa-bullhorn"></i></a>
+                <a href="#" class="sb-quick-btn" title="Calendar"><i class="fas fa-calendar-alt"></i></a>
+                <a href="#" class="sb-quick-btn" title="Inbox"><i class="fas fa-inbox"></i></a>
+                <a href="#" class="sb-quick-btn" title="News"><i class="fas fa-newspaper"></i></a>
+                <a href="#" class="sb-quick-btn red-alert" title="Emergency"><i class="fas fa-exclamation-circle"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="top-telemetry-bar">
+        <div class="topbar-left-zone">
+            <button class="sidebar-toggle-btn" onclick="toggleSidebarSize()">
+                <i class="fas fa-bars" id="toggleIcon"></i>
+            </button>
+            <div class="live-clock-widget">
+                <i class="far fa-clock"></i>
+                <span id="live-time-display">00:00:00 AM</span>
+            </div>
+        </div>
+        <div class="topbar-center-hub">
+            <div class="live-timetable-tracker-badge">
+                <div class="status-pulse"></div>
+                <span id="class-status-text"><i class="fas fa-sync-alt fa-spin"></i> Loading academic records...</span>
+            </div>
+        </div>
+        <div class="topbar-right-zone">
+            <div class="premium-news-console">
+                <a href="index.html#internships" class="news-badge-item"><i class="fas fa-star"></i><span>Internships</span></a>
+                <a href="index.html#horizons" class="news-badge-item"><i class="fas fa-globe"></i><span>Horizons</span></a>
+            </div>
+        </div>
+    </div>
+
+    <main class="main-workspace">
+        <div class="about-wrapper">
+            
+            <section class="overview-card">
+                <div class="overview-text">
+                    <h1>About Our University</h1>
+                    <p>ကျွန်တော်တို့ <strong>ကွန်ပျူတာတက္ကသိုလ်(သထုံ)</strong> သည် မွန်ပြည်နယ်၊ သထုံမြို့နယ်၊ ဂေါ့ကျေးရွာအနီး သာယာလှပပြီး အေးချမ်းလှသော ဝန္ဒာမိတောင်ခြေတွင် အောင်မြင်စွာ တည်ရှိပြီး ကျောင်းသား/သူများအား ခေတ်မှီကွန်ပျူတာ နည်းပညာရပ်များကို စနစ်တကျ သင်ကြားပြသပေးနေသော တက္ကသိုလ်တစ်ခု ဖြစ်ပါတယ်ဗျာ။</p>
+                    <p>အိုင်တီနည်းပညာ ခေတ်ရေစီးကြောင်းအတိုင်း လိုက်လျောညီထွေဖြစ်စေရန် အရည်အချင်းပြည့်ဝသော ကွန်ပျူတာပညာရှင်များ ပေါ်ထွက်လာစေရန်အတွက် လက်တွေ့ကျကျ လမ်းညွှန်သင်ကြားပေးလျက် ရှိပါသည်။</p>
+                </div>
+                <div class="photo-frame">
+                    <img src="imageForProject/UniMainBuilding.jpg" alt="UCSTT Campus View">
+                </div>
+            </section>
+
+            <section class="counter-deck">
+                <div class="counter-card">
+                    <div class="counter-icon"><i class="fas fa-user-graduate"></i></div>
+                    <div class="counter-number counter" data-target="850">0</div>
+                    <p>Active Students</p>
+                </div>
+                <div class="counter-card">
+                    <div class="counter-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <div class="counter-number counter" data-target="75">0</div>
+                    <p>Faculty Staff</p>
+                </div>
+                <div class="counter-card">
+                    <div class="counter-icon"><i class="fas fa-laptop-code"></i></div>
+                    <div class="counter-number counter" data-target="4">0</div>
+                    <p>Specialized Majors</p>
+                </div>
+            </section>
+
+            <section class="tab-universe">
+                <div class="tab-bar">
+                    <button class="tab-btn active" onclick="switchTab(event, 'vision')"><i class="fas fa-eye"></i> Our Vision</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'mission')"><i class="fas fa-bullseye"></i> Our Mission</button>
+                </div>
+                <div id="vision" class="tab-pane active">
+                    <h3>မျှော်မှန်းချက်ပန်းတိုင် (Our Vision)</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 15px;">နိုင်ငံတကာအဆင့်မီ ကွန်ပျူတာသိပ္ပံနှင့် နည်းပညာရပ်ဝန်းတစ်ခု ဖြစ်လာစေရန်နှင့် ဒေသတွင်း ဖွံ့ဖြိုးတိုးတက်မှုကို အထောက်အကူပြုနိုင်မည့် အိုင်တီဗဟိုချက်မ ဖြစ်လာစေရန်။</p>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> အရည်အသွေးမြင့်မားသော သင်ရိုးညွှန်းတမ်းများ စဉ်ဆက်မပြတ် ဖော်ဆောင်ရန်။</li>
+                        <li><i class="fas fa-check-circle"></i> သုတေသနလုပ်ငန်းများနှင့် တီထွင်ဆန်းသစ်မှုများကို အားပေးမြှင့်တင်ရန်။</li>
+                    </ul>
+                </div>
+                <div id="mission" class="tab-pane">
+                    <h3>လုပ်ငန်းတာဝန်များ (Our Mission)</h3>
+                    <ul>
+                        <li><i class="fas fa-arrow-alt-circle-right"></i> ခေတ်မှီကွန်ပျူတာနည်းပညာ ဖွံ့ဖြိုးတိုးတက်မှု အသိပညာရှင်၊ အတတ်ပညာရှင်များ မွေးထုတ်ပေးရန်။</li>
+                        <li><i class="fas fa-arrow-alt-circle-right"></i> ဒေသတွင်း လူမှုစီးပွားဘဝ ဖွံ့ဖြိုးတိုးတက်ရန်အတွက် နည်းပညာဆိုင်ရာ အကူအညီများ ပံ့ပိုးပေးရန်။</li>
+                    </ul>
+                </div>
+            </section>
+
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2026 University of Computer Studies (Thaton). All Rights Reserved.</p>
+        </div>
+    </main>
+
+    <script>
+        // ၁။ Sidebar Expand & Collapse Engine (Exactly matching homePage.html)
+        function toggleSidebarSize() {
+            const bodyNode = document.body;
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            bodyNode.classList.toggle('sidebar-collapsed');
+            
+            if (bodyNode.classList.contains('sidebar-collapsed')) {
+                toggleIcon.className = "fas fa-expand-alt";
+            } else {
+                toggleIcon.className = "fas fa-bars";
+            }
+        }
+
+        // ၂။ Live Digital Clock Node
+        function updateLiveClock() {
+            const timeDisplay = document.getElementById('live-time-display');
+            const now = new Date();
+            timeDisplay.innerText = now.toLocaleTimeString();
+        }
+        setInterval(updateLiveClock, 1000);
+        updateLiveClock();
+
+        // ၃။ Interactive Tabs Controller
+        function switchTab(evt, tabId) {
+            const panes = document.querySelectorAll('.tab-pane');
+            const buttons = document.querySelectorAll('.tab-btn');
+            
+            panes.forEach(pane => pane.classList.remove('active'));
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+
+        // ၄။ Intelligent Statistics Counter
+        document.addEventListener("DOMContentLoaded", () => {
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                let current = 0;
+                const increment = Math.ceil(target / 50);
+                
+                const runCounter = () => {
+                    current += increment;
+                    if(current < target) {
+                        counter.innerText = current;
+                        setTimeout(runCounter, 25);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                runCounter();
+            });
+            
+            // Dynamic Status Text Update Simulation
+            setTimeout(() => {
+                document.getElementById('class-status-text').innerText = "Portal Logs: Connection Secured & Fully Synchronized";
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
